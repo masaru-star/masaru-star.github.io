@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="ja">
+<!DOCTYPE html>
+<html lang="ja">
 <!--
    ██████╗ ██╗  ██╗██╗  ██╗ █████╗      ███╗   ███╗
   ██╔═══██╗██║  ██║██║ ██╔╝██╔══██╗     ████╗ ████║
@@ -7,36 +8,38 @@
   ╚██████╔╝██║  ██║██║  ██╗██║  ██║ █╗  ██║     ██║
    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚╝  ╚═╝     ╚═╝
 -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>トップページ | えむの倉庫</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<div id="star-container"></div>
-<script>
-    function createStar() {
-        const container = document.getElementById('star-container');
-        const star = document.createElement('div');
-        star.className = 'star';
-        const startX = Math.random() * window.innerWidth;
-        const startY = Math.random() * (window.innerHeight / 2);
-        const duration = Math.random() * 3 + 2;
-        const delay = Math.random() * 5;
+    <div id="star-container"></div>
+    <script>
+        function createStar() {
+            const container = document.getElementById('star-container');
+            const star = document.createElement('div');
+            star.className = 'star';
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * (window.innerHeight / 2);
+            const duration = Math.random() * 3 + 2;
+            const delay = Math.random() * 5;
 
-        star.style.left = `${startX}px`;
-        star.style.top = `${startY}px`;
-        star.style.animationDuration = `${duration}s`;
-        star.style.animationDelay = `${delay}s`;
+            star.style.left = `${startX}px`;
+            star.style.top = `${startY}px`;
+            star.style.animationDuration = `${duration}s`;
+            star.style.animationDelay = `${delay}s`;
 
-        container.appendChild(star);
-        setTimeout(() => {
-            star.remove();
-        }, (duration + delay) * 1000);
-    }
-    setInterval(createStar, 600);
-</script>
+            container.appendChild(star);
+            setTimeout(() => {
+                star.remove();
+            }, (duration + delay) * 1000);
+        }
+        setInterval(createStar, 600);
+    </script>
     <header>
         <h1>Welcome to My Page</h1>
         <p><span id="typing-text"></span><span class="cursor">|</span></p>
@@ -44,13 +47,14 @@
     <div class="container">
         <section id="about">
             <h2>About Me</h2>
-            <p>はじめまして！私はごく普通の学生、えむです。</p>
+            <p>真優のポートフォリオへようこそ。</p>
             <ul>
-            <li><b>別名義：</b>真優, まさる, Ohka.M,</li>
-            <li><b>最近：</b>家庭の事情により活動量減少</li>
-            <li><b>目標：</b>信頼を得ること…ですね？</li>
+                <li><b>別名義：</b>えむ, まさる, Ohka.M,</li>
+                <li><b>最近：</b>パソコンを買いました。やったね！</li>
+                <li><b>目標：</b>信頼を得ること…ですね？</li>
             </ul>
-            <p><a href="https://forms.gle/s417rUkMDvMt887a9"target="_blank" rel="noopener noreferrer">時間があればアンケートにご協力ください。</a></p>
+            <p><a href="https://forms.gle/s417rUkMDvMt887a9" target="_blank"
+                    rel="noopener noreferrer">時間があればアンケートにご協力ください。</a></p>
         </section>
         <section id="hobbies">
             <h2>Hobbies</h2>
@@ -63,124 +67,151 @@
         <section id="works">
             <h2>Works</h2>
             <label for="tag-filter">カテゴリで絞り込み：</label>
-                <select id="tag-filter">
-                    <option value="all">すべて表示</option>
-                    <option value="game">ゲーム全般</option>
-                    <option value="simulation">シミュレーションゲーム</option>
-                    <option value="simple">シンプルなゲーム</option>
-                    <option value="tool">ツール</option>
-                    <option value="art">アート</option>
-                    <option value="JS">#JavaScript</option>
-                    <option value="css">#CSS</option>
-                    <option value="note">#Note</option>
-                </select>
+            <select id="tag-filter">
+                <option value="all">すべて表示</option>
+                <option value="game">ゲーム全般</option>
+                <option value="simulation">シミュレーションゲーム</option>
+                <option value="simple">シンプルなゲーム</option>
+                <option value="tool">ツール</option>
+                <option value="art">アート</option>
+                <option value="JS">#JavaScript</option>
+                <option value="css">#CSS</option>
+                <option value="note">#Note</option>
+            </select>
             <ul>
-            <p id="no-result" style="display:none; color:#666; margin-top:1rem;">該当する作品はありません。</p>
-                <li data-tag="game simulation JS"><a title="ゲーム全般 シミュレーションゲーム #JavaScript" href="warship3d/play.html"target="_blank" rel="noopener noreferrer">軍艦シューティング</a>：three.jsを使用した射的ゲーム。<small>制作:2025.12　更新:2025.12</small></li>
-                <li data-tag="game simulation JS"><a title="ゲーム全般 シミュレーションゲーム #JavaScript" href="warship3d/play-v2.html"target="_blank" rel="noopener noreferrer">軍艦シューティング</a>：軍艦シューティングのリメイク作品。<small>制作:2026.07　更新:2025.08</small></li>
-                <li data-tag="game simulation JS"><a title="ゲーム全般 シミュレーションゲーム #JavaScript" href="https://masaru-star.github.io/JS.Hakoniwa-Island/"target="_blank" rel="noopener noreferrer">箱庭諸島風</a><span class="new-tag-anime">直近の更新あり</span>：CGIゲーム"箱庭諸島"のオマージュ作品。<small>制作:2025.08　更新:2026.09</small></li>
-                <li data-tag="game simulation JS"><a title="ゲーム全般 シミュレーションゲーム #JavaScript" href="fogwar/play.html"target="_blank" rel="noopener noreferrer">戦争の霧</a>：ターン制のストラテジーゲーム。<small>制作:2025.10　更新:2025.12</small></li>
-                <li data-tag="game JS"><a title="ゲーム全般 #JavaScript" href="hackpass/play.html"target="_blank" rel="noopener noreferrer">HACKER TERMINAL</a>：JSでパスワード認証を突破するだけのゲーム。<small>制作:2025.11　更新:2025.12</small></li>
-                <li data-tag="game simple JS"><a title="ゲーム全般 シンプルなゲーム #JavaScript" href="minesweeper/play.html"target="_blank" rel="noopener noreferrer">マインスイーパー</a>：王道ゲームの再現作品。<small>制作:2025.12　更新:2025.12</small></li>
-                <li data-tag="game simple JS"><a title="ゲーム全般 シンプルなゲーム #JavaScript" href="tetris/play.html"target="_blank" rel="noopener noreferrer">PC用テトリス</a>：王道ゲームの再現作品、ランキング機能付き。<small>制作:2025.12　更新:2025.12</small></li>
-                <li data-tag="tool JS"><a title="ツール #JavaScript" href="https://masaru-star.github.io/image-key/"target="_blank" rel="noopener noreferrer">Image-Key Crypto</a>：画像を暗号鍵として使用するツール。<small>制作:2026.01　更新:2026.01</small></li>
-                <li data-tag="art css"><a title="アート #CSS" href="train/play.html"target="_blank" rel="noopener noreferrer">車窓.html</a>：CSSアニメーションの練習用作品。<small>制作:2026.02　更新:2026.02</small></li>
-                <li data-tag="game note"><a title="ゲーム全般 #Note" href="CoC-6/PC.html"target="_blank" rel="noopener noreferrer">CoC6版用キャラシ</a>：TRPG用のキャラクターシート。<small>制作:2026.05　更新:2026.05</small></li>
+                <p id="no-result" style="display:none; color:#666; margin-top:1rem;">該当する作品はありません。</p>
+                <li data-tag="game simulation JS"><a title="ゲーム全般 シミュレーションゲーム #JavaScript"
+                        href="works/threejs/ver1/play.html" target="_blank"
+                        rel="noopener noreferrer">軍艦シューティング</a>：three.jsを使用した射的ゲーム。<small>制作:2025.12　更新:2025.12</small>
+                </li>
+                <li data-tag="game simulation JS"><a title="ゲーム全般 シミュレーションゲーム #JavaScript"
+                        href="works/threejs/ver2/navel-command.html" target="_blank" rel="noopener noreferrer">Navel
+                        Command</a>：軍艦シューティングのリメイク作品。<small>制作:2026.07　更新:2025.08</small>
+                </li>
+                <li data-tag="game simulation JS"><a title="ゲーム全般 シミュレーションゲーム #JavaScript"
+                        href="https://masaru-star.github.io/JS.Hakoniwa-Island/" target="_blank"
+                        rel="noopener noreferrer">箱庭諸島風</a><span
+                        class="new-tag-anime">直近の更新あり</span>：CGIゲーム"箱庭諸島"のオマージュ作品。<small>制作:2025.08　更新:2026.09</small>
+                </li>
+                <li data-tag="game simulation JS"><a title="ゲーム全般 シミュレーションゲーム #JavaScript" href="works/vanillajs/fogwar/play.html"
+                        target="_blank"
+                        rel="noopener noreferrer">戦争の霧</a>：ターン制のストラテジーゲーム。<small>制作:2025.10　更新:2025.12</small></li>
+                <li data-tag="game JS"><a title="ゲーム全般 #JavaScript" href="works/vanillajs/hackpass/play.html" target="_blank"
+                        rel="noopener noreferrer">HACKER
+                        TERMINAL</a>：JSでパスワード認証を突破するだけのゲーム。<small>制作:2025.11　更新:2025.12</small></li>
+                <li data-tag="game simple JS"><a title="ゲーム全般 シンプルなゲーム #JavaScript" href="works/minesweeper.html"
+                        target="_blank"
+                        rel="noopener noreferrer">マインスイーパー</a>：王道ゲームの再現作品。<small>制作:2025.12　更新:2025.12</small></li>
+                <li data-tag="game simple JS"><a title="ゲーム全般 シンプルなゲーム #JavaScript" href="works/tetris.html"
+                        target="_blank"
+                        rel="noopener noreferrer">PC用テトリス</a>：王道ゲームの再現作品、ランキング機能付き。<small>制作:2025.12　更新:2025.12</small>
+                </li>
+                <li data-tag="tool JS"><a title="ツール #JavaScript" href="https://masaru-star.github.io/image-key/"
+                        target="_blank" rel="noopener noreferrer">Image-Key
+                        Crypto</a>：画像を暗号鍵として使用するツール。<small>制作:2026.01　更新:2026.01</small></li>
+                <li data-tag="art css"><a title="アート #CSS" href="train/play.html" target="_blank"
+                        rel="noopener noreferrer">車窓.html</a>：CSSアニメーションの練習用作品。<small>制作:2026.02　更新:2026.02</small></li>
+                <li data-tag="game note"><a title="ゲーム全般 #Note" href="CoC-6/PC.html" target="_blank"
+                        rel="noopener noreferrer">CoC6版用キャラシ</a>：TRPG用のキャラクターシート。<small>制作:2026.05　更新:2026.05</small>
+                </li>
             </ul>
         </section>
     </div>
     <footer><b>
-        <p>&copy; 2025-2026 Ohka_M.　<small>All Rights Reserved.</small></p>
-        <p></br>今日もお疲れ様です。少しでも貴方の癒しになれば幸いです。</br>～ ～ ～　<span id="counter-container"></span>　～ ～ ～</br><small>※上記カウンターはあなたの訪問回数です。</small></p>
-    </b></footer>
-<script>
-    let visitCount = localStorage.getItem('visit_count') || 0;
-    visitCount = parseInt(visitCount) + 1;
-    localStorage.setItem('visit_count', visitCount);
-    const countStr = visitCount.toString().padStart(6, '0');
-    const container = document.getElementById('counter-container');
-    container.innerHTML = '';
-    for (let char of countStr) {
-        const span = document.createElement('span');
-        span.innerText = char;
-        span.className = `digit digit-${char}`;
-        container.appendChild(span);
-    }
-const tagFilter = document.getElementById('tag-filter');
-const filterableItems = document.querySelectorAll('li[data-tag]');
-tagFilter.addEventListener('change', function() {
-    const selectedTag = this.value;
-    filterableItems.forEach(item => {
-        const tags = item.getAttribute('data-tag').split(' ');
-        
-        if (selectedTag === 'all' || tags.includes(selectedTag)) {
-            item.style.display = 'list-item';
-        } else {
-            item.style.display = 'none';
+            <p>&copy; 2025-2026 Ohka_M.　<small>All Rights Reserved.</small></p>
+            <p></br>今日もお疲れ様です。少しでも貴方の癒しになれば幸いです。</br>～ ～ ～　<span id="counter-container"></span>　～ ～
+                ～</br><small>※上記カウンターはあなたの訪問回数です。</small></p>
+        </b></footer>
+    <script>
+        let visitCount = localStorage.getItem('visit_count') || 0;
+        visitCount = parseInt(visitCount) + 1;
+        localStorage.setItem('visit_count', visitCount);
+        const countStr = visitCount.toString().padStart(6, '0');
+        const container = document.getElementById('counter-container');
+        container.innerHTML = '';
+        for (let char of countStr) {
+            const span = document.createElement('span');
+            span.innerText = char;
+            span.className = `digit digit-${char}`;
+            container.appendChild(span);
         }
-    });
-});
-const noResult = document.getElementById('no-result');
-tagFilter.addEventListener('change', function() {
-    const selectedTag = this.value;
-    let visibleCount = 0;
-    filterableItems.forEach(item => {
-        const tags = item.getAttribute('data-tag').split(' ');
-        
-        if (selectedTag === 'all' || tags.includes(selectedTag)) {
-            item.style.display = 'list-item';
-            visibleCount++;
-        } else {
-            item.style.display = 'none';
-        }
-    });
-    noResult.style.display = (visibleCount === 0) ? 'block' : 'none';
-});
+        const tagFilter = document.getElementById('tag-filter');
+        const filterableItems = document.querySelectorAll('li[data-tag]');
+        tagFilter.addEventListener('change', function () {
+            const selectedTag = this.value;
+            filterableItems.forEach(item => {
+                const tags = item.getAttribute('data-tag').split(' ');
+
+                if (selectedTag === 'all' || tags.includes(selectedTag)) {
+                    item.style.display = 'list-item';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+        const noResult = document.getElementById('no-result');
+        tagFilter.addEventListener('change', function () {
+            const selectedTag = this.value;
+            let visibleCount = 0;
+            filterableItems.forEach(item => {
+                const tags = item.getAttribute('data-tag').split(' ');
+
+                if (selectedTag === 'all' || tags.includes(selectedTag)) {
+                    item.style.display = 'list-item';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            noResult.style.display = (visibleCount === 0) ? 'block' : 'none';
+        });
 
 
-const textElement = document.getElementById('typing-text');
-const phrases = [
-    "ここは私のホームページです。",
-    "ポートフォリオへようこそ！",
-    "YouTubeチャンネル「@teriarus」を保有しています。",
-    "フォロー、或いはチャンネル登録をお忘れなく。",
-    "今日も仕事お疲れ様です。",
-    "おかえりなさい。また会えて嬉しいです。",
-    "いつでも最新のプロジェクトをご覧になれます。",
-    "『理想郷技研』でインディーゲーム開発を行っている者です。"
-];
-let currentPhrase = ""; // 現在タイピング中の文字列
-let charIndex = 0;
-let isDeleting = false;
-let typeSpeed = 150;
-function getRandomPhrase() {
-    const candidates = phrases.filter(p => p !== currentPhrase);
-    // 候補の中からランダムに選択（もし配列に1つしか要素がない場合はそれを返す）
-    const randomIndex = Math.floor(Math.random() * candidates.length);
-    return candidates.length > 0 ? candidates[randomIndex] : phrases[0];
-}
-// 最初のフレーズをセット
-currentPhrase = getRandomPhrase();
-function type() {
-    // phrase から currentPhrase に変更
-    const currentText = currentPhrase.substring(0, charIndex);
-    textElement.textContent = currentText;
-    if (!isDeleting && charIndex < currentPhrase.length) {
-        charIndex++;
-        typeSpeed = 150; 
-    } else if (isDeleting && charIndex > 0) {
-        charIndex--;
-        typeSpeed = 50;
-    } else if (!isDeleting && charIndex === currentPhrase.length) {
-        isDeleting = true;
-        typeSpeed = 2000; // 出し切った後の待機時間
-    } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
+        const textElement = document.getElementById('typing-text');
+        const phrases = [
+            "ここは私のホームページです。",
+            "ポートフォリオへようこそ！",
+            "YouTubeチャンネル「@teriarus」を保有しています。",
+            "フォロー、或いはチャンネル登録をお忘れなく。",
+            "今日も仕事お疲れ様です。",
+            "おかえりなさい。また会えて嬉しいです。",
+            "いつでも最新のプロジェクトをご覧になれます。",
+            "『理想郷技研』でインディーゲーム開発を行っている者です。"
+        ];
+        let currentPhrase = ""; // 現在タイピング中の文字列
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 150;
+        function getRandomPhrase() {
+            const candidates = phrases.filter(p => p !== currentPhrase);
+            // 候補の中からランダムに選択（もし配列に1つしか要素がない場合はそれを返す）
+            const randomIndex = Math.floor(Math.random() * candidates.length);
+            return candidates.length > 0 ? candidates[randomIndex] : phrases[0];
+        }
+        // 最初のフレーズをセット
         currentPhrase = getRandomPhrase();
-        typeSpeed = 500; // 消えきった後の待機時間
-    }
-    setTimeout(type, typeSpeed);
-}
-document.addEventListener('DOMContentLoaded', type);
-</script></body>
+        function type() {
+            // phrase から currentPhrase に変更
+            const currentText = currentPhrase.substring(0, charIndex);
+            textElement.textContent = currentText;
+            if (!isDeleting && charIndex < currentPhrase.length) {
+                charIndex++;
+                typeSpeed = 150;
+            } else if (isDeleting && charIndex > 0) {
+                charIndex--;
+                typeSpeed = 50;
+            } else if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                typeSpeed = 2000; // 出し切った後の待機時間
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                currentPhrase = getRandomPhrase();
+                typeSpeed = 500; // 消えきった後の待機時間
+            }
+            setTimeout(type, typeSpeed);
+        }
+        document.addEventListener('DOMContentLoaded', type);
+    </script>
+</body>
+
 </html>
