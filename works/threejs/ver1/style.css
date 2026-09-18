@@ -1,0 +1,263 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #000;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    user-select: none;
+}
+
+#ui-layer {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    pointer-events: none;
+    display: none;
+}
+
+.stats {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 5px solid #00d4ff;
+}
+
+#score-display {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fdbb2d;
+}
+
+#speed-display {
+    font-size: 18px;
+    color: #00d4ff;
+    margin-top: 5px;
+}
+
+#weapon-info {
+    margin-top: 10px;
+    color: #aaa;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.active-weapon {
+    color: #00d4ff;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#health-bar-container {
+    width: 200px;
+    height: 10px;
+    background: #333;
+    border-radius: 5px;
+    margin-top: 8px;
+}
+
+#health-bar {
+    width: 100%;
+    height: 100%;
+    background: #ff4757;
+    transition: width 0.3s;
+}
+
+#reload-container {
+    width: 200px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    margin-top: 5px;
+    border-radius: 2px;
+}
+
+#reload-bar {
+    width: 0%;
+    height: 100%;
+    background: #00d4ff;
+}
+
+/* 緊急修理アイコンのスタイル */
+.repair-icon-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+#repair-cross-svg {
+    width: 20px;
+    height: 20px;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+}
+
+#repair-fill {
+    transition: height 0.1s linear;
+}
+
+#compass-container {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 5px 20px;
+    border-radius: 20px;
+    border: 1px solid #00d4ff;
+    font-weight: bold;
+    font-size: 18px;
+    color: #00d4ff;
+    display: none;
+}
+
+#minimap-container {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 200px;
+    height: 200px;
+    background: rgba(0, 15, 30, 0.85);
+    border: 2px solid #00d4ff;
+    border-radius: 10px;
+    overflow: hidden;
+    display: none;
+}
+
+#minimap-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+#warning-ui {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ff4757;
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 0 0 10px red;
+    display: none;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+#selection-screen {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, #1a2a6c, #b21f1f, #fdbb2d);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.ship-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.ship-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.3s;
+    text-align: center;
+    width: 220px;
+}
+
+.ship-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #00d4ff;
+}
+
+#crosshair {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(0, 212, 255, 0.7);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    display: none;
+}
+
+#crosshair::before,
+#crosshair::after {
+    content: '';
+    position: absolute;
+    background: rgba(0, 212, 255, 0.7);
+}
+
+#crosshair::before {
+    left: 50%;
+    top: -5px;
+    width: 2px;
+    height: 10px;
+    transform: translateX(-50%);
+}
+
+#crosshair::after {
+    top: 50%;
+    left: -5px;
+    width: 10px;
+    height: 2px;
+    transform: translateY(-50%);
+}
+
+#game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    display: none;
+    border: 2px solid #ff4757;
+    min-width: 360px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 200;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    border-bottom: 1px solid #333;
+    padding: 2px 0;
+}
+
+.result-sub {
+    font-size: 12px;
+    color: #aaa;
+    padding-left: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    background: #00d4ff;
+    border: none;
+    padding: 12px 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #000;
+}
