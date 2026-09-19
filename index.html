@@ -1,31 +1,17 @@
 <!DOCTYPE html>
 <html lang="ja" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/156039860?v=4">
     <title>トップページ | 真優の開発工廠</title>
-    <!-- Tailwind CSSの読み込み -->
     <script src="https://cdn.tailwindcss.com/"></script>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .detail-content {
-            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-        }
-        .detail-content.open {
-            opacity: 1;
-        }
-    </style>
 </head>
 
 <body class="bg-slate-900 text-slate-100 font-sans antialiased relative min-h-screen flex flex-col">
-    <!-- 背景の星コンテナ -->
     <div id="star-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
-
-    <!-- 固定ヘッダー（ナビゲーション） -->
     <nav class="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50 shadow-sm">
         <div class="max-w-4xl mx-auto px-4 h-16 flex justify-between items-center">
             <div class="font-bold text-lg md:text-xl tracking-widest text-slate-200">
@@ -39,10 +25,7 @@
             </ul>
         </div>
     </nav>
-
-    <!-- メインコンテンツ -->
     <main class="flex-grow relative z-10 pt-20">
-        <!-- ヒーローセクション -->
         <header class="text-center pt-20 pb-16 px-4">
             <h1
                 class="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 drop-shadow-sm">
@@ -54,18 +37,16 @@
         </header>
 
         <div class="max-w-4xl mx-auto px-4 pb-16 space-y-12">
-
-            <!-- About Me セクション -->
             <section id="about"
                 class="bg-slate-800/80 backdrop-blur rounded-2xl p-6 md:p-8 shadow-xl border border-slate-700/50 scroll-mt-24">
                 <h2 class="text-2xl font-bold border-b-2 border-blue-500 pb-2 mb-6 flex items-center gap-2">
                     <span class="text-blue-400">#</span> About Me
                 </h2>
-                <p class="mb-4 text-slate-300">真優のポートフォリオへようこそ。</p>
+                <p class="mb-4 text-slate-300">真優です。趣味開発者のなり損ねです。</p>
                 <ul class="space-y-3 mb-6 text-slate-300">
                     <li class="flex items-start">
                         <span class="mr-3 text-blue-500 mt-1 text-sm">▶</span>
-                        <span><b class="text-slate-100 font-semibold mr-1">別名義：</b>えむ, まさる, Ohka.M,</span>
+                        <span><b class="text-slate-100 font-semibold mr-1">別名義：</b>まさる, Ohka.M,</span>
                     </li>
                     <li class="flex items-start">
                         <span class="mr-3 text-blue-500 mt-1 text-sm">▶</span>
@@ -73,11 +54,9 @@
                     </li>
                     <li class="flex items-start">
                         <span class="mr-3 text-blue-500 mt-1 text-sm">▶</span>
-                        <span><b class="text-slate-100 font-semibold mr-1">目標：</b>信頼を得ること…ですね？</span>
+                        <span><b class="text-slate-100 font-semibold mr-1">目標：</b>似非技術民を辞めたい。</span>
                     </li>
                 </ul>
-
-                <!-- 詳細な文章を追加できるスペース -->
                 <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-700 mb-8">
                     <h3 class="text-slate-200 font-semibold mb-3 border-b border-slate-700/50 pb-2">詳細プロフィール</h3>
                     <div class="text-slate-300 text-sm md:text-base leading-relaxed space-y-3">
@@ -94,7 +73,8 @@
 
 2025
 ・Webゲーム制作を開始
-・JavaScript作品を複数制作</textarea>
+・JavaScript作品を複数制作
+</textarea>
                     </div>
                 </div>
 
@@ -105,8 +85,6 @@
                     </a>
                 </div>
             </section>
-
-            <!-- Hobbies セクション -->
             <section id="hobbies"
                 class="bg-slate-800/80 backdrop-blur rounded-2xl p-6 md:p-8 shadow-xl border border-slate-700/50 scroll-mt-24">
                 <h2 class="text-2xl font-bold border-b-2 border-green-500 pb-2 mb-6 flex items-center gap-2">
@@ -131,17 +109,18 @@
                 </ul>
             </section>
 
-            <!-- Works セクション -->
             <section id="works"
                 class="bg-slate-800/80 backdrop-blur rounded-2xl p-6 md:p-8 shadow-xl border border-slate-700/50 scroll-mt-24">
                 <h2 class="text-2xl font-bold border-b-2 border-purple-500 pb-2 mb-6 flex items-center gap-2">
                     <span class="text-purple-400">#</span> Works
                 </h2>
 
-                <!-- フィルター -->
-                <div class="mb-8 flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-900/50 p-4 rounded-xl border border-slate-700">
-                    <label for="tag-filter" class="text-slate-300 text-sm font-medium whitespace-nowrap">カテゴリで絞り込み：</label>
-                    <select id="tag-filter" class="w-full sm:w-auto bg-slate-700 text-slate-100 border border-slate-600 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none cursor-pointer hover:bg-slate-600 transition-colors">
+                <div
+                    class="mb-8 flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                    <label for="tag-filter"
+                        class="text-slate-300 text-sm font-medium whitespace-nowrap">カテゴリで絞り込み：</label>
+                    <select id="tag-filter"
+                        class="w-full sm:w-auto bg-slate-700 text-slate-100 border border-slate-600 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none cursor-pointer hover:bg-slate-600 transition-colors">
                         <option value="all">すべて表示</option>
                         <option value="game">ゲーム全般</option>
                         <option value="simulation">シミュレーションゲーム</option>
@@ -155,29 +134,26 @@
                 </div>
 
                 <ul id="works-list" class="space-y-3">
-                    <p id="no-result" style="display:none;" class="text-slate-400 text-center py-6 bg-slate-900/30 rounded-lg border border-slate-700 border-dashed mb-3">
+                    <p id="no-result" style="display:none;"
+                        class="text-slate-400 text-center py-6 bg-slate-900/30 rounded-lg border border-slate-700 border-dashed mb-3">
                         該当する作品はありません。
                     </p>
-                    <!-- JSで動的に作品リストが生成されます -->
                 </ul>
             </section>
 
-            <!-- Links セクション -->
             <section id="links"
                 class="bg-slate-800/80 backdrop-blur rounded-2xl p-6 md:p-8 shadow-xl border border-slate-700/50 scroll-mt-24">
                 <h2 class="text-2xl font-bold border-b-2 border-yellow-500 pb-2 mb-6 flex items-center gap-2">
                     <span class="text-yellow-400">#</span> Links
                 </h2>
-                
+
                 <div id="links-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- JSで動的にリンク一覧が生成されます -->
                 </div>
             </section>
 
         </div>
     </main>
 
-    <!-- フッター -->
     <footer class="mt-auto border-t border-slate-700/80 bg-slate-900/90 backdrop-blur py-8 relative z-10">
         <div class="max-w-4xl mx-auto px-4 text-center">
             <p class="text-slate-300 font-semibold mb-6">&copy; 2025-2026 Ohka_M. <span
@@ -196,12 +172,7 @@
         </div>
     </footer>
 
-    <!-- 各種スクリプト -->
     <script>
-        // ==========================================
-        // データの定義 (Works & Links)
-        // ==========================================
-
         const worksData = [
             {
                 title: "軍艦シューティング",
@@ -341,10 +312,6 @@
                 icon: "📝"
             }
         ];
-
-        // ==========================================
-        // Worksリストのレンダリング
-        // ==========================================
         const worksContainer = document.getElementById('works-list');
         const noResult = document.getElementById('no-result');
 
@@ -380,7 +347,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- 詳細概要部分 -->
                         <div class="detail-content">
                             <div class="mt-4 pt-4 border-t border-slate-600/50 text-sm text-slate-300 leading-relaxed">
                                 <p>${work.detailDesc}</p>
@@ -396,7 +362,7 @@
         function toggleWorkDetail(element) {
             const detailContent = element.nextElementSibling;
             const arrowIcon = element.querySelector('.arrow-icon');
-            
+
             if (detailContent.style.maxHeight) {
                 // 閉じる処理
                 detailContent.style.maxHeight = null;
@@ -409,10 +375,6 @@
                 arrowIcon.style.transform = 'rotate(180deg)';
             }
         }
-
-        // ==========================================
-        // Linksリストのレンダリング
-        // ==========================================
         const linksContainer = document.getElementById('links-list');
 
         function renderLinks() {
@@ -430,23 +392,12 @@
                 linksContainer.insertAdjacentHTML('beforeend', linkHTML);
             });
         }
-
-        // レンダリング実行
         renderWorks();
         renderLinks();
-
-
-        // ==========================================
-        // 既存機能（星、カウンター、タイピング、フィルター）
-        // ==========================================
-
-        // Worksのタグフィルター機能
         const tagFilter = document.getElementById('tag-filter');
-        
         function filterWorks() {
             const selectedTag = tagFilter.value;
             let visibleCount = 0;
-            // レンダリングされたアイテムを再取得
             const filterableItems = document.querySelectorAll('#works-list li[data-tag]');
 
             filterableItems.forEach(item => {
@@ -459,7 +410,7 @@
                     item.style.display = 'none';
                     // フィルタリング時に開いている詳細を閉じる
                     const detail = item.querySelector('.detail-content');
-                    if(detail && detail.style.maxHeight) {
+                    if (detail && detail.style.maxHeight) {
                         toggleWorkDetail(item.firstElementChild.firstElementChild);
                     }
                 }
@@ -490,8 +441,6 @@
             }, (duration + delay) * 1000);
         }
         setInterval(createStar, 600);
-
-        // 訪問回数カウンター
         let visitCount = localStorage.getItem('visit_count') || 0;
         visitCount = parseInt(visitCount) + 1;
         localStorage.setItem('visit_count', visitCount);
@@ -504,8 +453,6 @@
             span.className = `digit digit-${char}`;
             containerCount.appendChild(span);
         }
-
-        // ヘッダーのタイピングアニメーション
         const textElement = document.getElementById('typing-text');
         const phrases = [
             "ここは私のホームページです。",
@@ -552,4 +499,5 @@
         setTimeout(type, 1000);
     </script>
 </body>
+
 </html>
