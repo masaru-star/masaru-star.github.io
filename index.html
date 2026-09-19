@@ -5,8 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>トップページ | 真優の開発工廠</title>
     <!-- Tailwind CSSの読み込み -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/"></script>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* カスタムスタイル（開閉アニメーション用） */
+        .detail-content {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .detail-content.open {
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body class="bg-slate-900 text-slate-100 font-sans antialiased relative min-h-screen flex flex-col">
@@ -23,6 +35,7 @@
                 <li><a href="#about" class="hover:text-blue-400 transition-colors">About</a></li>
                 <li><a href="#hobbies" class="hover:text-green-400 transition-colors">Hobbies</a></li>
                 <li><a href="#works" class="hover:text-purple-400 transition-colors">Works</a></li>
+                <li><a href="#links" class="hover:text-yellow-400 transition-colors">Links</a></li>
             </ul>
         </div>
     </nav>
@@ -49,7 +62,7 @@
                     <span class="text-blue-400">#</span> About Me
                 </h2>
                 <p class="mb-4 text-slate-300">真優のポートフォリオへようこそ。</p>
-                <ul class="space-y-3 mb-8 text-slate-300">
+                <ul class="space-y-3 mb-6 text-slate-300">
                     <li class="flex items-start">
                         <span class="mr-3 text-blue-500 mt-1 text-sm">▶</span>
                         <span><b class="text-slate-100 font-semibold mr-1">別名義：</b>えむ, まさる, Ohka.M,</span>
@@ -63,6 +76,16 @@
                         <span><b class="text-slate-100 font-semibold mr-1">目標：</b>信頼を得ること…ですね？</span>
                     </li>
                 </ul>
+
+                <!-- 詳細な文章を追加できるスペース -->
+                <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-700 mb-8">
+                    <h3 class="text-slate-200 font-semibold mb-3 border-b border-slate-700/50 pb-2">詳細プロフィール</h3>
+                    <div class="text-slate-300 text-sm md:text-base leading-relaxed space-y-3">
+                        <p>ここに詳細な自己紹介や、現在の活動内容、興味のある技術分野などの文章を自由に追加できます。</p>
+                        <p>文章を段落で分けたり、必要に応じてリストを追加したりすることも可能です。コンテンツの量が増えても枠内に収まるようにデザインされています。</p>
+                    </div>
+                </div>
+
                 <div>
                     <a href="https://forms.gle/s417rUkMDvMt887a9" target="_blank" rel="noopener noreferrer"
                         class="inline-flex items-center text-sm md:text-base px-5 py-2.5 bg-blue-600/20 text-blue-300 border border-blue-500/50 rounded-full hover:bg-blue-600/40 hover:text-white transition-all">
@@ -104,12 +127,9 @@
                 </h2>
 
                 <!-- フィルター -->
-                <div
-                    class="mb-8 flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-900/50 p-4 rounded-xl border border-slate-700">
-                    <label for="tag-filter"
-                        class="text-slate-300 text-sm font-medium whitespace-nowrap">カテゴリで絞り込み：</label>
-                    <select id="tag-filter"
-                        class="w-full sm:w-auto bg-slate-700 text-slate-100 border border-slate-600 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none cursor-pointer hover:bg-slate-600 transition-colors">
+                <div class="mb-8 flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                    <label for="tag-filter" class="text-slate-300 text-sm font-medium whitespace-nowrap">カテゴリで絞り込み：</label>
+                    <select id="tag-filter" class="w-full sm:w-auto bg-slate-700 text-slate-100 border border-slate-600 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none cursor-pointer hover:bg-slate-600 transition-colors">
                         <option value="all">すべて表示</option>
                         <option value="game">ゲーム全般</option>
                         <option value="simulation">シミュレーションゲーム</option>
@@ -122,188 +142,26 @@
                     </select>
                 </div>
 
-                <ul class="space-y-3">
-                    <p id="no-result" style="display:none;"
-                        class="text-slate-400 text-center py-6 bg-slate-900/30 rounded-lg border border-slate-700 border-dashed">
+                <ul id="works-list" class="space-y-3">
+                    <p id="no-result" style="display:none;" class="text-slate-400 text-center py-6 bg-slate-900/30 rounded-lg border border-slate-700 border-dashed mb-3">
                         該当する作品はありません。
                     </p>
-
-                    <!-- Worksアイテム -->
-                    <li data-tag="game simulation JS">
-                        <div
-                            class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 transition-colors flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                            <div class="flex-grow">
-                                <a title="ゲーム全般 シミュレーションゲーム #JavaScript" href="works/threejs/ver1/play.html"
-                                    target="_blank" rel="noopener noreferrer"
-                                    class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4">軍艦シューティング</a>
-                                <span
-                                    class="text-slate-300 text-sm block md:inline md:ml-1 mt-1 md:mt-0">：three.jsを使用した射的ゲーム。</span>
-                            </div>
-                            <div
-                                class="text-[11px] text-slate-400 md:text-right shrink-0 bg-slate-800/80 px-2.5 py-1.5 rounded w-fit leading-tight mt-2 md:mt-0">
-                                制作:2025.12<br class="hidden md:block"><span class="md:hidden"> | </span>更新:2025.12
-                            </div>
-                        </div>
-                    </li>
-
-                    <li data-tag="game simulation JS">
-                        <div
-                            class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 transition-colors flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                            <div class="flex-grow">
-                                <a title="ゲーム全般 シミュレーションゲーム #JavaScript" href="works/threejs/Ver2/naval-command.html"
-                                    target="_blank" rel="noopener noreferrer"
-                                    class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4">Navel
-                                    Command</a>
-                                <span
-                                    class="text-slate-300 text-sm block md:inline md:ml-1 mt-1 md:mt-0">：軍艦シューティングのリメイク作品。</span>
-                            </div>
-                            <div
-                                class="text-[11px] text-slate-400 md:text-right shrink-0 bg-slate-800/80 px-2.5 py-1.5 rounded w-fit leading-tight mt-2 md:mt-0">
-                                制作:2026.07<br class="hidden md:block"><span class="md:hidden"> | </span>更新:2026.08
-                            </div>
-                        </div>
-                    </li>
-
-                    <li data-tag="game simulation JS">
-                        <div
-                            class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 transition-colors flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                            <div class="flex-grow">
-                                <a title="ゲーム全般 シミュレーションゲーム #JavaScript"
-                                    href="https://masaru-star.github.io/JS.Hakoniwa-Island/" target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4">箱庭諸島風</a>
-                                <span
-                                    class="new-tag-anime inline-block ml-2 px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-[10px] font-bold border border-red-500/30 align-middle mb-1">直近の更新あり</span>
-                                <span
-                                    class="text-slate-300 text-sm block md:inline md:ml-1 mt-1 md:mt-0">：CGIゲーム"箱庭諸島"のオマージュ作品。</span>
-                            </div>
-                            <div
-                                class="text-[11px] text-slate-400 md:text-right shrink-0 bg-slate-800/80 px-2.5 py-1.5 rounded w-fit leading-tight mt-2 md:mt-0">
-                                制作:2025.08<br class="hidden md:block"><span class="md:hidden"> | </span>更新:2026.09
-                            </div>
-                        </div>
-                    </li>
-
-                    <li data-tag="game simulation JS">
-                        <div
-                            class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 transition-colors flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                            <div class="flex-grow">
-                                <a title="ゲーム全般 シミュレーションゲーム #JavaScript" href="works/vanillajs/fogwar/play.html"
-                                    target="_blank" rel="noopener noreferrer"
-                                    class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4">戦争の霧</a>
-                                <span
-                                    class="text-slate-300 text-sm block md:inline md:ml-1 mt-1 md:mt-0">：ターン制のストラテジーゲーム。</span>
-                            </div>
-                            <div
-                                class="text-[11px] text-slate-400 md:text-right shrink-0 bg-slate-800/80 px-2.5 py-1.5 rounded w-fit leading-tight mt-2 md:mt-0">
-                                制作:2025.10<br class="hidden md:block"><span class="md:hidden"> | </span>更新:2025.12
-                            </div>
-                        </div>
-                    </li>
-
-                    <li data-tag="game JS">
-                        <div
-                            class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 transition-colors flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                            <div class="flex-grow">
-                                <a title="ゲーム全般 #JavaScript" href="works/vanillajs/hackpass/play.html" target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4">HACKER
-                                    TERMINAL</a>
-                                <span
-                                    class="text-slate-300 text-sm block md:inline md:ml-1 mt-1 md:mt-0">：JSでパスワード認証を突破するだけのゲーム。</span>
-                            </div>
-                            <div
-                                class="text-[11px] text-slate-400 md:text-right shrink-0 bg-slate-800/80 px-2.5 py-1.5 rounded w-fit leading-tight mt-2 md:mt-0">
-                                制作:2025.11<br class="hidden md:block"><span class="md:hidden"> | </span>更新:2025.12
-                            </div>
-                        </div>
-                    </li>
-
-                    <li data-tag="game simple JS">
-                        <div
-                            class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 transition-colors flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                            <div class="flex-grow">
-                                <a title="ゲーム全般 シンプルなゲーム #JavaScript" href="works/minesweeper.html" target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4">マインスイーパー</a>
-                                <span
-                                    class="text-slate-300 text-sm block md:inline md:ml-1 mt-1 md:mt-0">：王道ゲームの再現作品。</span>
-                            </div>
-                            <div
-                                class="text-[11px] text-slate-400 md:text-right shrink-0 bg-slate-800/80 px-2.5 py-1.5 rounded w-fit leading-tight mt-2 md:mt-0">
-                                制作:2025.12<br class="hidden md:block"><span class="md:hidden"> | </span>更新:2025.12
-                            </div>
-                        </div>
-                    </li>
-
-                    <li data-tag="game simple JS">
-                        <div
-                            class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 transition-colors flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                            <div class="flex-grow">
-                                <a title="ゲーム全般 シンプルなゲーム #JavaScript" href="works/tetris.html" target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4">PC用テトリス</a>
-                                <span
-                                    class="text-slate-300 text-sm block md:inline md:ml-1 mt-1 md:mt-0">：王道ゲームの再現作品、ランキング機能付き。</span>
-                            </div>
-                            <div
-                                class="text-[11px] text-slate-400 md:text-right shrink-0 bg-slate-800/80 px-2.5 py-1.5 rounded w-fit leading-tight mt-2 md:mt-0">
-                                制作:2025.12<br class="hidden md:block"><span class="md:hidden"> | </span>更新:2025.12
-                            </div>
-                        </div>
-                    </li>
-
-                    <li data-tag="tool JS">
-                        <div
-                            class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 transition-colors flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                            <div class="flex-grow">
-                                <a title="ツール #JavaScript" href="https://masaru-star.github.io/image-key/"
-                                    target="_blank" rel="noopener noreferrer"
-                                    class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4">Image-Key
-                                    Crypto</a>
-                                <span
-                                    class="text-slate-300 text-sm block md:inline md:ml-1 mt-1 md:mt-0">：画像を暗号鍵として使用するツール。</span>
-                            </div>
-                            <div
-                                class="text-[11px] text-slate-400 md:text-right shrink-0 bg-slate-800/80 px-2.5 py-1.5 rounded w-fit leading-tight mt-2 md:mt-0">
-                                制作:2026.01<br class="hidden md:block"><span class="md:hidden"> | </span>更新:2026.01
-                            </div>
-                        </div>
-                    </li>
-
-                    <li data-tag="art css">
-                        <div
-                            class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 transition-colors flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                            <div class="flex-grow">
-                                <a title="アート #CSS" href="css/play.html" target="_blank" rel="noopener noreferrer"
-                                    class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4">車窓.html</a>
-                                <span
-                                    class="text-slate-300 text-sm block md:inline md:ml-1 mt-1 md:mt-0">：CSSアニメーションの練習用作品。</span>
-                            </div>
-                            <div
-                                class="text-[11px] text-slate-400 md:text-right shrink-0 bg-slate-800/80 px-2.5 py-1.5 rounded w-fit leading-tight mt-2 md:mt-0">
-                                制作:2026.02<br class="hidden md:block"><span class="md:hidden"> | </span>更新:2026.02
-                            </div>
-                        </div>
-                    </li>
-
-                    <li data-tag="game note">
-                        <div
-                            class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 transition-colors flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                            <div class="flex-grow">
-                                <a title="ゲーム全般 #Note" href="funs/coc6.html" target="_blank" rel="noopener noreferrer"
-                                    class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4">CoC6版用キャラシ</a>
-                                <span
-                                    class="text-slate-300 text-sm block md:inline md:ml-1 mt-1 md:mt-0">：TRPG用のキャラクターシート。</span>
-                            </div>
-                            <div
-                                class="text-[11px] text-slate-400 md:text-right shrink-0 bg-slate-800/80 px-2.5 py-1.5 rounded w-fit leading-tight mt-2 md:mt-0">
-                                制作:2026.05<br class="hidden md:block"><span class="md:hidden"> | </span>更新:2026.05
-                            </div>
-                        </div>
-                    </li>
+                    <!-- JSで動的に作品リストが生成されます -->
                 </ul>
             </section>
+
+            <!-- Links セクション -->
+            <section id="links"
+                class="bg-slate-800/80 backdrop-blur rounded-2xl p-6 md:p-8 shadow-xl border border-slate-700/50 scroll-mt-24">
+                <h2 class="text-2xl font-bold border-b-2 border-yellow-500 pb-2 mb-6 flex items-center gap-2">
+                    <span class="text-yellow-400">#</span> Links
+                </h2>
+                
+                <div id="links-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- JSで動的にリンク一覧が生成されます -->
+                </div>
+            </section>
+
         </div>
     </main>
 
@@ -328,6 +186,277 @@
 
     <!-- 各種スクリプト -->
     <script>
+        // ==========================================
+        // データの定義 (Works & Links)
+        // ==========================================
+
+        const worksData = [
+            {
+                title: "軍艦シューティング",
+                url: "works/threejs/ver1/play.html",
+                tags: ["game", "simulation", "JS"],
+                tooltip: "ゲーム全般 シミュレーションゲーム #JavaScript",
+                shortDesc: "three.jsを使用した射的ゲーム。",
+                detailDesc: "three.jsを学習して初期に制作した3Dシューティングゲームです。マウス操作で照準を合わせ、敵艦を撃破するシンプルな作りになっています。物理演算やパーティクルエフェクトの基礎を取り入れています。",
+                created: "2025.12",
+                updated: "2025.12",
+                isNew: false
+            },
+            {
+                title: "Navel Command",
+                url: "works/threejs/Ver2/naval-command.html",
+                tags: ["game", "simulation", "JS"],
+                tooltip: "ゲーム全般 シミュレーションゲーム #JavaScript",
+                shortDesc: "軍艦シューティングのリメイク作品。",
+                detailDesc: "過去の軍艦シューティングをベースに、グラフィックと操作性を大幅に向上させたリメイク版です。ステージ構成の見直しや、拡張された艦隊編成を実装し、よりゲーム性を高めました。",
+                created: "2026.07",
+                updated: "2026.08",
+                isNew: false
+            },
+            {
+                title: "箱庭諸島風",
+                url: "https://masaru-star.github.io/JS.Hakoniwa-Island/",
+                tags: ["game", "simulation", "JS"],
+                tooltip: "ゲーム全般 シミュレーションゲーム #JavaScript",
+                shortDesc: "CGIゲーム\"箱庭諸島\"のオマージュ作品。",
+                detailDesc: "名作CGIゲームのシステムをJavaScriptで再現したシミュレーションゲームです。毎ターン行動を予約し、島の発展や他島との交流（あるいは戦争）を楽しむことができます。フロントエンドのみで動作する仕組みを構築しました。",
+                created: "2025.08",
+                updated: "2026.09",
+                isNew: true
+            },
+            {
+                title: "戦争の霧",
+                url: "works/vanillajs/fogwar/play.html",
+                tags: ["game", "simulation", "JS"],
+                tooltip: "ゲーム全般 シミュレーションゲーム #JavaScript",
+                shortDesc: "ターン制のストラテジーゲーム。",
+                detailDesc: "視界（Fog of War）の概念を取り入れた戦術シミュレーションです。見えない敵の動きを予測しながら部隊を動かす緊張感をVanilla JSのみで実装しました。",
+                created: "2025.10",
+                updated: "2025.12",
+                isNew: false
+            },
+            {
+                title: "HACKER TERMINAL",
+                url: "works/vanillajs/hackpass/play.html",
+                tags: ["game", "JS"],
+                tooltip: "ゲーム全般 #JavaScript",
+                shortDesc: "JSでパスワード認証を突破するだけのゲーム。",
+                detailDesc: "映画やゲームによくあるハッキングのUIを模したミニゲームです。JSで認証システムを構築し、他の人が作った認証システムを突破しましょう。",
+                created: "2025.11",
+                updated: "2025.12",
+                isNew: false
+            },
+            {
+                title: "マインスイーパー",
+                url: "works/minesweeper.html",
+                tags: ["game", "simple", "JS"],
+                tooltip: "ゲーム全般 シンプルなゲーム #JavaScript",
+                shortDesc: "王道ゲームの再現作品。",
+                detailDesc: "定番パズルゲームをWebブラウザ上で動作するように実装しました。再帰処理を用いた空白の一括解放や、フラグ立て機能など、標準的なマインスイーパーの機能を全て備えています。",
+                created: "2025.12",
+                updated: "2025.12",
+                isNew: false
+            },
+            {
+                title: "PC用テトリス",
+                url: "works/tetris.html",
+                tags: ["game", "simple", "JS"],
+                tooltip: "ゲーム全般 シンプルなゲーム #JavaScript",
+                shortDesc: "王道ゲームの再現作品、ランキング機能付き。",
+                detailDesc: "キーボード操作に最適化されたテトリスクローンです。ホールド機能や対戦機能を実装し、スコアをローカルストレージに保存する機能を付けています。",
+                created: "2025.12",
+                updated: "2025.12",
+                isNew: false
+            },
+            {
+                title: "Image-Key Crypto",
+                url: "https://masaru-star.github.io/image-key/",
+                tags: ["tool", "JS"],
+                tooltip: "ツール #JavaScript",
+                shortDesc: "画像を暗号鍵として使用するツール。",
+                detailDesc: "テキストデータを暗号化・復号化するためのパスワードの代わりに、画像ファイルのピクセルデータからハッシュを生成して鍵とするWebツールです。実用性よりもアイデアを形にする目的で作成しました。",
+                created: "2026.01",
+                updated: "2026.01",
+                isNew: false
+            },
+            {
+                title: "車窓.html",
+                url: "css/play.html",
+                tags: ["art", "css"],
+                tooltip: "アート #CSS",
+                shortDesc: "CSSアニメーションの練習用作品。",
+                detailDesc: "JavaScript、HTMLとCSSで列車の窓から見える風景のアニメーションを表現した作品です。",
+                created: "2026.02",
+                updated: "2026.02",
+                isNew: false
+            },
+            {
+                title: "(個人用)CoC6版用キャラシ",
+                url: "funs/coc6.html",
+                tags: ["game", "note"],
+                tooltip: "ゲーム全般 #Note",
+                shortDesc: "TRPG用のキャラクターシート。",
+                detailDesc: "クトゥルフ神話TRPG（第6版）を遊ぶ際に使用する、個人的なデジタル版のキャラクターシートです。",
+                created: "2026.05",
+                updated: "2026.05",
+                isNew: false
+            }
+        ];
+
+        const linksData = [
+            {
+                title: "GitHub",
+                url: "https://github.com/masaru-star",
+                desc: "ソースコードやプロジェクトの管理を行っています。",
+                icon: "💻"
+            },
+            {
+                title: "YouTube",
+                url: "https://youtube.com/@teriarus",
+                desc: "チャンネル「@teriarus」で動画を投稿しています。",
+                icon: "▶️"
+            },
+            {
+                title: "X (Twitter)",
+                url: "https://x.com/masaru_pg7",
+                desc: "日常のつぶやきや進捗報告などを発信しています。",
+                icon: "🐦"
+            },
+            {
+                title: "Zenn / Qiita",
+                url: "#",
+                desc: "建設中・・・",
+                icon: "📝"
+            }
+        ];
+
+        // ==========================================
+        // Worksリストのレンダリング
+        // ==========================================
+        const worksContainer = document.getElementById('works-list');
+        const noResult = document.getElementById('no-result');
+
+        function renderWorks() {
+            worksData.forEach(work => {
+                const li = document.createElement('li');
+                li.setAttribute('data-tag', work.tags.join(' '));
+                li.className = 'work-item block';
+
+                const isNewBadge = work.isNew ? `<span class="new-tag-anime inline-block ml-2 px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-[10px] font-bold border border-red-500/30 align-middle mb-1">直近の更新あり</span>` : '';
+
+                li.innerHTML = `
+                    <div class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 transition-colors">
+                        <!-- クリック可能なヘッダー部分 -->
+                        <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 cursor-pointer select-none" onclick="toggleWorkDetail(this)">
+                            <div class="flex-grow">
+                                <a title="${work.tooltip}" href="${work.url}" target="_blank" rel="noopener noreferrer" 
+                                   class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4" 
+                                   onclick="event.stopPropagation()"> <!-- リンククリック時にアコーディオンが動かないようにする -->
+                                    ${work.title}
+                                </a>
+                                ${isNewBadge}
+                                <span class="text-slate-300 text-sm block md:inline md:ml-1 mt-1 md:mt-0">：${work.shortDesc}</span>
+                            </div>
+                            <div class="flex justify-between items-center md:flex-none">
+                                <div class="text-[11px] text-slate-400 md:text-right shrink-0 bg-slate-800/80 px-2.5 py-1.5 rounded w-fit leading-tight mt-2 md:mt-0">
+                                    制作:${work.created}<br class="hidden md:block"><span class="md:hidden"> | </span>更新:${work.updated}
+                                </div>
+                                <div class="ml-4 md:ml-6 text-slate-400 transition-transform duration-300 arrow-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 詳細概要部分 -->
+                        <div class="detail-content">
+                            <div class="mt-4 pt-4 border-t border-slate-600/50 text-sm text-slate-300 leading-relaxed">
+                                <p>${work.detailDesc}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                worksContainer.appendChild(li);
+            });
+        }
+
+        // 作品詳細の開閉制御関数
+        function toggleWorkDetail(element) {
+            const detailContent = element.nextElementSibling;
+            const arrowIcon = element.querySelector('.arrow-icon');
+            
+            if (detailContent.style.maxHeight) {
+                // 閉じる処理
+                detailContent.style.maxHeight = null;
+                detailContent.classList.remove('open');
+                arrowIcon.style.transform = 'rotate(0deg)';
+            } else {
+                // 開く処理
+                detailContent.style.maxHeight = detailContent.scrollHeight + "px";
+                detailContent.classList.add('open');
+                arrowIcon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // ==========================================
+        // Linksリストのレンダリング
+        // ==========================================
+        const linksContainer = document.getElementById('links-list');
+
+        function renderLinks() {
+            linksData.forEach(link => {
+                const linkHTML = `
+                    <a href="${link.url}" target="_blank" rel="noopener noreferrer" 
+                       class="flex items-start gap-3 p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:bg-slate-700/60 hover:border-yellow-500/50 transition-all group">
+                        <div class="text-2xl">${link.icon}</div>
+                        <div>
+                            <h3 class="font-bold text-slate-200 group-hover:text-yellow-400 transition-colors">${link.title}</h3>
+                            <p class="text-xs text-slate-400 mt-1">${link.desc}</p>
+                        </div>
+                    </a>
+                `;
+                linksContainer.insertAdjacentHTML('beforeend', linkHTML);
+            });
+        }
+
+        // レンダリング実行
+        renderWorks();
+        renderLinks();
+
+
+        // ==========================================
+        // 既存機能（星、カウンター、タイピング、フィルター）
+        // ==========================================
+
+        // Worksのタグフィルター機能
+        const tagFilter = document.getElementById('tag-filter');
+        
+        function filterWorks() {
+            const selectedTag = tagFilter.value;
+            let visibleCount = 0;
+            // レンダリングされたアイテムを再取得
+            const filterableItems = document.querySelectorAll('#works-list li[data-tag]');
+
+            filterableItems.forEach(item => {
+                const tags = item.getAttribute('data-tag').split(' ');
+
+                if (selectedTag === 'all' || tags.includes(selectedTag)) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                    // フィルタリング時に開いている詳細を閉じる
+                    const detail = item.querySelector('.detail-content');
+                    if(detail && detail.style.maxHeight) {
+                        toggleWorkDetail(item.firstElementChild.firstElementChild);
+                    }
+                }
+            });
+            noResult.style.display = (visibleCount === 0) ? 'block' : 'none';
+        }
+
+        tagFilter.addEventListener('change', filterWorks);
+
         // 星を降らせるアニメーション
         function createStar() {
             const container = document.getElementById('star-container');
@@ -355,35 +484,14 @@
         visitCount = parseInt(visitCount) + 1;
         localStorage.setItem('visit_count', visitCount);
         const countStr = visitCount.toString().padStart(6, '0');
-        const container = document.getElementById('counter-container');
-        container.innerHTML = '';
+        const containerCount = document.getElementById('counter-container');
+        containerCount.innerHTML = '';
         for (let char of countStr) {
             const span = document.createElement('span');
             span.innerText = char;
             span.className = `digit digit-${char}`;
-            container.appendChild(span);
+            containerCount.appendChild(span);
         }
-
-        // Worksのタグフィルター機能
-        const tagFilter = document.getElementById('tag-filter');
-        const filterableItems = document.querySelectorAll('li[data-tag]');
-        const noResult = document.getElementById('no-result');
-
-        tagFilter.addEventListener('change', function () {
-            const selectedTag = this.value;
-            let visibleCount = 0;
-            filterableItems.forEach(item => {
-                const tags = item.getAttribute('data-tag').split(' ');
-
-                if (selectedTag === 'all' || tags.includes(selectedTag)) {
-                    item.style.display = 'list-item';
-                    visibleCount++;
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-            noResult.style.display = (visibleCount === 0) ? 'block' : 'none';
-        });
 
         // ヘッダーのタイピングアニメーション
         const textElement = document.getElementById('typing-text');
@@ -421,7 +529,7 @@
                 typeSpeed = 50;
             } else if (!isDeleting && charIndex === currentPhrase.length) {
                 isDeleting = true;
-                typeSpeed = 2000;
+                typeSpeed = 3000;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 currentPhrase = getRandomPhrase();
@@ -429,7 +537,7 @@
             }
             setTimeout(type, typeSpeed);
         }
-        document.addEventListener('DOMContentLoaded', type);
+        setTimeout(type, 1000);
     </script>
 </body>
 </html>
