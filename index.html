@@ -363,7 +363,8 @@
             const detailContent = element.nextElementSibling;
             const arrowIcon = element.querySelector('.arrow-icon');
 
-            if (detailContent.style.maxHeight) {
+            // クラスの有無で開閉を判定する
+            if (detailContent.classList.contains('open')) {
                 // 閉じる処理
                 detailContent.style.maxHeight = null;
                 detailContent.classList.remove('open');
