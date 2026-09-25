@@ -1,0 +1,9 @@
+<!doctype html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>作品 | 真優の開発工廠</title><link rel="stylesheet" href="style.css"></head><body>
+<div data-site-header></div><main><div class="container"><header class="page-heading"><p class="eyebrow">Works</p><h1>作品</h1><p class="lead">制作したゲーム、ツール、アニメーションです。カテゴリから絞り込めます。</p></header><div class="filter-row"><label for="tag-filter">カテゴリ</label><select id="tag-filter"><option value="all">すべて表示</option></select></div><ul id="works-list" class="works-list"></ul><p id="no-result" class="empty" hidden>該当する作品はありません。</p></div></main><div data-site-footer></div><script src="site.js"></script><script src="data.js"></script><script>
+renderSiteChrome('works.html');
+const list = document.getElementById('works-list'), filter = document.getElementById('tag-filter'), noResult = document.getElementById('no-result');
+const tags = [...new Set(worksData.flatMap(work => work.tags))];
+tags.forEach(tag => filter.insertAdjacentHTML('beforeend', `<option value="${tag}">${tag}</option>`));
+function renderWorks() { const selected = filter.value; const shown = worksData.filter(work => selected === 'all' || work.tags.includes(selected)); list.innerHTML = shown.map(work => `<li class="card work-item"><div class="work-top"><div><a class="work-title" href="${work.url}" target="_blank" rel="noopener noreferrer">${work.title}</a>${work.isNew ? '<span class="badge">直近の更新あり</span>' : ''}<p class="work-summary">${work.shortDesc}</p><div>${work.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div></div><div class="work-meta">制作：${work.created}<br>更新：${work.updated}</div></div><p class="work-detail">${work.detailDesc}</p></li>`).join(''); noResult.hidden = shown.length !== 0; }
+filter.addEventListener('change', renderWorks); renderWorks();
+</script></body></html>
