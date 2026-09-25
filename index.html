@@ -3,15 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="wid<body class="bg-slate-50 text-slate-800 font-sans antialiased relative min-h-screen flex flex-col">
-    <!-- ※もし星のエフェクトがライトテーマで目立たない場合は star-container を削除するか色調整が必要です -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/156039860?v=4">
+    <title>トップページ | 真優の開発工廠</title>
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-slate-900 text-slate-100 font-sans antialiased relative min-h-screen flex flex-col">
     <div id="star-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
-    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <nav class="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50 shadow-sm">
         <div class="max-w-4xl mx-auto px-4 h-16 flex justify-between items-center">
-            <div class="font-bold text-lg md:text-xl tracking-widest text-slate-800">
-                <a href="#" class="hover:text-black transition-colors">真優の開発工廠</a>
+            <div class="font-bold text-lg md:text-xl tracking-widest text-slate-200">
+                <a href="#" class="hover:text-white transition-colors">真優の開発工廠</a>
             </div>
-            <ul class="flex space-x-4 md:space-x-6 text-sm md:text-base font-medium text-slate-600">
+            <ul class="flex space-x-4 md:space-x-6 text-sm md:text-base font-medium text-slate-300">
                 <li><a href="#about" class="hover:text-blue-400 transition-colors">About</a></li>
                 <li><a href="#hobbies" class="hover:text-green-400 transition-colors">Hobbies</a></li>
                 <li><a href="#works" class="hover:text-purple-400 transition-colors">Works</a></li>
@@ -31,19 +37,28 @@
         </header>
 
         <div class="max-w-4xl mx-auto px-4 pb-16 space-y-12">
-<section id="about" class="bg-white/90 backdrop-blur rounded-2xl p-6 md:p-8 shadow-lg border border-slate-200 scroll-mt-24">
-    <h2 class="text-2xl font-bold border-b-2 border-blue-500 pb-2 mb-6 flex items-center gap-2 text-slate-800">
-        <span class="text-blue-600">#</span> About Me
-    </h2>
-    <p class="mb-4 text-slate-600">真優です。趣味開発者のなり損ねです。</p>
-    <ul class="space-y-3 mb-6 text-slate-600">
-        <li class="flex items-start">
-            <span class="mr-3 text-blue-600 mt-1 text-sm">▶</span>
-            <span><b class="text-slate-900 font-semibold mr-1">別名義：</b>まさる, Ohka.M,</span>
-        </li>
-    </ul>
-    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mb-8">
-        <h3 class="text-slate-800 font-semibold mb-3 border-b border-slate-200 pb-2">詳細プロフィール</h3>
+            <section id="about"
+                class="bg-slate-800/80 backdrop-blur rounded-2xl p-6 md:p-8 shadow-xl border border-slate-700/50 scroll-mt-24">
+                <h2 class="text-2xl font-bold border-b-2 border-blue-500 pb-2 mb-6 flex items-center gap-2">
+                    <span class="text-blue-400">#</span> About Me
+                </h2>
+                <p class="mb-4 text-slate-300">真優です。趣味開発者のなり損ねです。</p>
+                <ul class="space-y-3 mb-6 text-slate-300">
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-500 mt-1 text-sm">▶</span>
+                        <span><b class="text-slate-100 font-semibold mr-1">別名義：</b>まさる, Ohka.M,</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-500 mt-1 text-sm">▶</span>
+                        <span><b class="text-slate-100 font-semibold mr-1">最近：</b>パソコンを買いました。やったね！</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-500 mt-1 text-sm">▶</span>
+                        <span><b class="text-slate-100 font-semibold mr-1">目標：</b>似非技術民を辞めたい。</span>
+                    </li>
+                </ul>
+                <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-700 mb-8">
+                    <h3 class="text-slate-200 font-semibold mb-3 border-b border-slate-700/50 pb-2">詳細プロフィール</h3>
                     <div class="text-slate-300 text-sm md:text-base leading-relaxed space-y-3">
                         <textarea readonly>
 主な活動：Web制作・ゲーム制作
@@ -100,9 +115,12 @@
                     <span class="text-purple-400">#</span> Works
                 </h2>
 
-                <div class="mb-8 flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-100 p-4 rounded-xl border border-slate-200">
-    <label for="tag-filter" class="text-slate-700 text-sm font-medium whitespace-nowrap">カテゴリで絞り込み：</label>
-    <select id="tag-filter" class="w-full sm:w-auto bg-white text-slate-800 border border-slate-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none cursor-pointer hover:bg-slate-50 transition-colors">
+                <div
+                    class="mb-8 flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                    <label for="tag-filter"
+                        class="text-slate-300 text-sm font-medium whitespace-nowrap">カテゴリで絞り込み：</label>
+                    <select id="tag-filter"
+                        class="w-full sm:w-auto bg-slate-700 text-slate-100 border border-slate-600 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none cursor-pointer hover:bg-slate-600 transition-colors">
                         <option value="all">すべて表示</option>
                         <option value="game">ゲーム全般</option>
                         <option value="simulation">シミュレーションゲーム</option>
@@ -136,12 +154,14 @@
         </div>
     </main>
 
-    <footer class="mt-auto border-t border-slate-200 bg-white/90 backdrop-blur py-8 relative z-10">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-        <p class="text-slate-700 font-semibold mb-6">&copy; 2025-2026 Ohka_M. <span class="text-slate-400 font-normal text-sm ml-2 block sm:inline mt-1 sm:mt-0">All Rights Reserved.</span></p>
+    <footer class="mt-auto border-t border-slate-700/80 bg-slate-900/90 backdrop-blur py-8 relative z-10">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <p class="text-slate-300 font-semibold mb-6">&copy; 2025-2026 Ohka_M. <span
+                    class="text-slate-500 font-normal text-sm ml-2 block sm:inline mt-1 sm:mt-0">All Rights
+                    Reserved.</span></p>
 
-        <div class="inline-block bg-slate-50 px-6 py-5 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-slate-600 text-sm mb-4">今日もお疲れ様です。少しでも貴方の癒しになれば幸いです。</p>
+            <div class="inline-block bg-slate-800/50 px-6 py-5 rounded-2xl border border-slate-700/80 shadow-inner">
+                <p class="text-slate-300 text-sm mb-4">今日もお疲れ様です。少しでも貴方の癒しになれば幸いです。</p>
                 <div class="flex items-center justify-center gap-2 md:gap-3 mb-3 text-slate-500 select-none">
                     <span>～</span><span>～</span><span>～</span>
                     <span id="counter-container" class="flex gap-[2px]"></span>
