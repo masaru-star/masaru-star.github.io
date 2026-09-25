@@ -8,7 +8,6 @@
     animation: fall linear forwards;
     opacity: 0;
 }
-
 @keyframes fall {
     0% {
         transform: translateY(-20px);
@@ -119,4 +118,7 @@ textarea:focus {
 
 .detail-content.open {
     opacity: 1;
+}
+.white-icon {
+  filter: brightness(0) invert(1);
 }
