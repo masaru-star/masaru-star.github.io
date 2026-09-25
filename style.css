@@ -101,3 +101,4 @@ select { min-height: 42px; padding: 0 12px; color: var(--ink); background: #fff;
 }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+
