@@ -231,7 +231,7 @@
             },
             {
                 title: "マインスイーパー",
-                url: "works/minesweeper.html",
+                url: "works/vanillajs/minesweeper.html",
                 tags: ["game", "simple", "JS"],
                 tooltip: "ゲーム全般 シンプルなゲーム #JavaScript",
                 shortDesc: "王道ゲームの再現作品。",
@@ -242,7 +242,7 @@
             },
             {
                 title: "PC用テトリス",
-                url: "works/tetris.html",
+                url: "works/vanillajs/tetris.html",
                 tags: ["game", "simple", "JS"],
                 tooltip: "ゲーム全般 シンプルなゲーム #JavaScript",
                 shortDesc: "王道ゲームの再現作品、ランキング機能付き。",
@@ -291,25 +291,25 @@
                 title: "GitHub",
                 url: "https://github.com/masaru-star",
                 desc: "ソースコードやプロジェクトの管理を行っています。",
-                icon: "💻"
+                icon: `<img src="icons/github.svg" />`
             },
             {
                 title: "YouTube",
                 url: "https://youtube.com/@teriarus",
                 desc: "チャンネル「@teriarus」で動画を投稿しています。",
-                icon: "▶️"
+                icon: `<img src="icons/youtube.svg" />`
             },
             {
                 title: "X (Twitter)",
                 url: "https://x.com/masaru_pg7",
                 desc: "日常のつぶやきや進捗報告などを発信しています。",
-                icon: "🐦"
+                icon: `<img src="icons/x.svg" />`
             },
             {
                 title: "Qiita",
                 url: "https://qiita.com/masaru-star",
                 desc: "技術的な備忘録や記事を時々書いています。",
-                icon: "📝"
+                icon: `<img src="icons/qiita.svg" />`
             }
         ];
         const worksContainer = document.getElementById('works-list');
@@ -330,7 +330,7 @@
                             <div class="flex-grow">
                                 <a title="${work.tooltip}" href="${work.url}" target="_blank" rel="noopener noreferrer" 
                                    class="text-purple-400 hover:text-purple-300 font-bold text-base md:text-lg underline decoration-purple-500/30 underline-offset-4" 
-                                   onclick="event.stopPropagation()"> <!-- リンククリック時にアコーディオンが動かないようにする -->
+                                   onclick="event.stopPropagation()">
                                     ${work.title}
                                 </a>
                                 ${isNewBadge}
