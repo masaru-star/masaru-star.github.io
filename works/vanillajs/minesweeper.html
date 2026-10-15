@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head><link rel="icon" href="https://avatars.githubusercontent.com/u/156039860?v=4">
+
+<head>
+    <script src="../../src/maintenance.js"></script>
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/156039860?v=4">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>マインスイーパー | 真優の開発工廠</title>
     <style>
-        body { font-family: sans-serif; touch-action: manipulation; background-color: #f0f0f0; margin: 0; padding: 10px; }
-        
+        body {
+            font-family: sans-serif;
+            touch-action: manipulation;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 10px;
+        }
+
         #status {
             text-align: center;
             font-size: 16px;
@@ -14,7 +23,7 @@
             background: #fff;
             padding: 10px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         #gameContainer {
@@ -45,12 +54,40 @@
             cursor: pointer;
         }
 
-        .revealed { background-color: #eee; cursor: default; }
-        .bomb { background-color: #f00; color: #fff; }
-        .flag { background-color: #f90; color: #fff; }
+        .revealed {
+            background-color: #eee;
+            cursor: default;
+        }
 
-        .n1 { color: blue; } .n2 { color: green; } .n3 { color: red; }
-        .n4 { color: navy; } .n5 { color: brown; }
+        .bomb {
+            background-color: #f00;
+            color: #fff;
+        }
+
+        .flag {
+            background-color: #f90;
+            color: #fff;
+        }
+
+        .n1 {
+            color: blue;
+        }
+
+        .n2 {
+            color: green;
+        }
+
+        .n3 {
+            color: red;
+        }
+
+        .n4 {
+            color: navy;
+        }
+
+        .n5 {
+            color: brown;
+        }
 
         #actionMenu {
             position: absolute;
@@ -58,7 +95,7 @@
             flex-direction: row;
             gap: 10px;
             z-index: 100;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             padding: 10px;
             border-radius: 20px;
             pointer-events: auto;
@@ -74,10 +111,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
-        .btn-dig { background-color: #4CAF50; }
-        .btn-flag { background-color: #FF9800; }
+
+        .btn-dig {
+            background-color: #4CAF50;
+        }
+
+        .btn-flag {
+            background-color: #FF9800;
+        }
 
         button#restart {
             display: block;
@@ -91,6 +134,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div id="status">
@@ -195,18 +239,18 @@
         // --- モバイル用メニュー制御 ---
         function showActionMenu(e, r, c) {
             if (isGameOver || board[r][c].isRevealed) return;
-            
+
             selectedCell = { r, c };
             actionMenu.style.display = 'flex';
-            
+
             // メニューの位置調整（タップした場所の近く）
-            const menuWidth = 110; 
+            const menuWidth = 110;
             let posX = e.pageX - menuWidth / 2;
             let posY = e.pageY - 70;
 
             actionMenu.style.left = `${posX}px`;
             actionMenu.style.top = `${posY}px`;
-            
+
             e.stopPropagation();
         }
 
@@ -275,7 +319,7 @@
             const cell = board[r][c];
             const cellEl = document.getElementById(`cell-${r}-${c}`);
             cellEl.className = 'cell' + (cell.isRevealed ? ' revealed' : '') + (cell.isFlagged ? ' flag' : '');
-            
+
             if (cell.isRevealed) {
                 if (cell.isBomb) {
                     cellEl.classList.add('bomb');
@@ -312,4 +356,5 @@
         initGame();
     </script>
 </body>
+
 </html>

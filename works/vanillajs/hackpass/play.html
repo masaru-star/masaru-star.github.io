@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head><link rel="icon" href="https://avatars.githubusercontent.com/u/156039860?v=4">
+
+<head>
+    <script src="../../../src/maintenance.js"></script>
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/156039860?v=4">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HACKER TERMINAL V2 | 真優の開発工廠</title>
     <link rel="stylesheet" href="hack.css">
 </head>
+
 <body>
 
     <div id="terminal-window">
@@ -16,7 +20,7 @@
         <div class="line">TYPE "help" FOR COMMAND LIST.</div>
         <div class="line">---------------------------------------------------</div>
         <div id="history"></div>
-        
+
         <div class="input-line">
             <span class="prompt" id="prompt-label">guest@terminal:~$</span>
             <input type="text" id="command-input" autocomplete="off" autofocus>
@@ -50,15 +54,15 @@
         // State Management
         const STORAGE_KEY = "hacker_terminal_v2";
         let state = {
-            nodes: {}, 
-            customLogic: {} 
+            nodes: {},
+            customLogic: {}
         };
 
         // Runtime variables
         let inputMode = "command"; // 'command', 'password', 'confirm'
         let currentConnectTarget = null;
         let pendingAction = null; // { type: 'delete_all' | 'delete_node', target: name }
-        
+
         // DOM Elements
         const historyDiv = document.getElementById('history');
         const inputField = document.getElementById('command-input');
@@ -87,7 +91,7 @@
                 }
                 saveState();
             }
-            
+
             inputField.focus();
             window.scrollTo(0, document.body.scrollHeight);
         }
@@ -105,21 +109,21 @@
         }
 
         // --- INPUT HANDLING ---
-        inputField.addEventListener('keydown', function(e) {
+        inputField.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
                 const val = inputField.value.trim();
-                
+
                 if (inputMode === "command") {
                     appendLine("guest@terminal:~$ " + val);
                     processCommand(val);
                 } else if (inputMode === "password") {
-                    appendLine("Password: " + "*".repeat(val.length)); 
+                    appendLine("Password: " + "*".repeat(val.length));
                     verifyPassword(val);
                 } else if (inputMode === "confirm") {
                     appendLine(val);
                     processConfirmation(val);
                 }
-                
+
                 inputField.value = '';
             }
         });
@@ -239,7 +243,7 @@
                     appendLine(`Error: Node [${name}] does not exist.`);
                     return;
                 }
-                
+
                 // Check if OPEN
                 if (state.nodes[name].status !== 'open') {
                     appendLine(`Error: Node [${name}] is LOCKED. Cannot delete.`, "status-close");
@@ -272,7 +276,7 @@
             } else {
                 appendLine("Action cancelled.");
             }
-            
+
             // Reset input
             resetInputMode();
         }
@@ -283,7 +287,7 @@
                 appendLine(`Error: Node [${name}] does not exist.`);
                 return;
             }
-            
+
             // Check if trying to view system nodes (Alpha/Omega)
             if (state.nodes[name].type === 'default') {
                 appendLine(`Error: Source code for [${name}] is ENCRYPTED/PROTECTED.`, "status-close");
@@ -315,7 +319,7 @@
                         const checkFunc = new Function('p', logicStr);
                         isAuthenticated = checkFunc(password);
                     } else {
-                        isAuthenticated = (password === "admin"); 
+                        isAuthenticated = (password === "admin");
                     }
                 }
             } catch (e) {
@@ -352,7 +356,7 @@
             name = name.toUpperCase();
             editingTargetName = name;
             editorTitleName.textContent = name;
-            
+
             if (state.nodes[name] && state.customLogic[name]) {
                 codeEditor.value = state.customLogic[name];
             } else {
@@ -380,4 +384,5 @@
         init();
     </script>
 </body>
+
 </html>
