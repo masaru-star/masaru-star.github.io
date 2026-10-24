@@ -1,52 +1,308 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 
 <head>
-  <script src="/src/maintenance.js"></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="真優の開発工廠。Web制作・ゲーム制作のポートフォリオです。">
-  <title>真優の開発工廠</title>
-  <link rel="icon" href="https://avatars.githubusercontent.com/u/156039860?v=4">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>真優の開発工廠 | TOP-稼働中プロジェクト一覧</title>
+    <style>
+        :root {
+            --bg-color: #fcfcfc;
+            --text-color: #222222;
+            --border-color: #dddddd;
+            --accent-color: #0066cc;
+            --sub-text: #666666;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 24px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+        }
+
+        p.description {
+            margin: 0;
+            color: var(--sub-text);
+            font-size: 0.9rem;
+        }
+
+        /* フィルター・検索エリア */
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"],
+        select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background-color: #fff;
+            color: var(--text-color);
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            border-color: var(--accent-color);
+        }
+
+        input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* テーブル形式のリスト */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--sub-text);
+            background-color: #f7f7f7;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* ステータスバッジ（最小限の文字装飾） */
+        .status {
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        /* タグ */
+        .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            color: var(--sub-text);
+            background-color: #eeeeee;
+            padding: 2px 6px;
+            margin-right: 4px;
+            margin-bottom: 2px;
+            border-radius: 3px;
+        }
+
+        .links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin-right: 8px;
+            font-size: 0.85rem;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 32px;
+            color: var(--sub-text);
+        }
+    </style>
 </head>
 
 <body>
-  <div data-site-header></div>
-  <main>
+
     <div class="container">
-      <section class="hero">
-        <p class="eyebrow">Portfolio</p>
-        <h1>真優の開発工廠</h1>
-        <p class="lead">Web制作やゲーム制作の記録をまとめた個人サイトです。プロフィール、趣味、作品、各種リンクをページごとにご案内します。</p>
-      </section>
-      <section class="grid home-grid" aria-label="コンテンツ一覧">
-        <a class="card home-card" href="about.html">
-          <h2>プロフィール</h2>
-          <p>活動内容や使用技術、これまでの制作について紹介します。</p><span class="card-link">プロフィールを見る</span>
-        </a>
-        <a class="card home-card" href="hobbies.html">
-          <h2>趣味</h2>
-          <p>開発以外も含めた、日頃関心を寄せていることです。</p><span class="card-link">趣味を見る</span>
-        </a>
-        <a class="card home-card" href="works.html">
-          <h2>作品</h2>
-          <p>制作したゲーム、ツール、アニメーションを一覧で掲載しています。</p><span class="card-link">作品を見る</span>
-        </a>
-        <a class="card home-card" href="links.html">
-          <h2>リンク</h2>
-          <p>GitHub、YouTube、X、Qiitaなどの外部アカウントです。</p><span class="card-link">リンクを見る</span>
-        </a>
-        <a class="card home-card" href="mutual-links.html">
-          <h2>相互リンク</h2>
-          <p>相互リンク先を掲載するための専用ページです。</p><span class="card-link">相互リンクを見る</span>
-        </a>
-      </section>
+        <header>
+            <h1>プロジェクト管理状況</h1>
+            <p>真優の開発工廠へようこそ。<br>現在、サイトを段階的に改装しています。</p>
+        </header>
+
+        <!-- コントロールエリア -->
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="プロジェクト名や概要で検索...">
+            <select id="statusFilter">
+                <option value="ALL">すべてのステータス</option>
+                <option value="稼働中">稼働中</option>
+                <option value="一時閉鎖中">一時閉鎖中</option>
+                <option value="更新停止">更新停止</option>
+            </select>
+        </div>
+
+        <!-- テーブルエリア -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">プロジェクト名</th>
+                        <th style="width: 12%;">ステータス</th>
+                        <th style="width: 35%;">概要</th>
+                        <th style="width: 15%;">技術 / タグ</th>
+                        <th style="width: 13%;">リンク</th>
+                    </tr>
+                </thead>
+                <tbody id="projectTableBody">
+                    <!-- JSで動的に追加されます -->
+                </tbody>
+            </table>
+            <div id="noDataMessage" class="empty-message" style="display: none;">
+                該当するプロジェクトは見つかりませんでした。
+            </div>
+        </div>
     </div>
-  </main>
-  <div data-site-footer></div>
-  <script src="site.js"></script>
-  <script>renderSiteChrome('index.html');</script>
+
+    <script>
+        const projectsData = [
+            {
+                id: "proj-001",
+                name: "M式箱庭諸島",
+                status: "更新停止",
+                description: "他方面のアップデートを優先します。",
+                tags: ["JavaScript", "TypeScript", "Supabase"],
+                urls: []
+            },
+            {
+                id: "proj-002",
+                name: "SNSProject Mirror",
+                status: "稼働中",
+                description: "Ayaneko氏の作成した掲示板サイト。アップデート時期は未定とのこと。",
+                tags: ["JavaScript", "Supabase"],
+                urls: []
+            },
+            {
+                id: "proj-003",
+                name: "ADAエコシステム 公式サイト",
+                status: "更新停止",
+                description: "評議会員の判断によります。",
+                tags: ["JavaScript"],
+                urls: []
+            },
+            {
+                id: "proj-004",
+                name: "メインドメイン・真優の開発工廠",
+                status: "一時閉鎖中",
+                description: "優先して改装を行います。今月中に済ませたい。",
+                tags: ["JavaScript"],
+                urls: []
+            }
+        ];
+        function renderProjects(projects) {
+            const tbody = document.getElementById("projectTableBody");
+            const noDataMessage = document.getElementById("noDataMessage");
+            tbody.innerHTML = "";
+
+            if (projects.length === 0) {
+                noDataMessage.style.display = "block";
+                return;
+            } else {
+                noDataMessage.style.display = "none";
+            }
+
+            projects.forEach(project => {
+                const tr = document.createElement("tr");
+
+                // ステータスに応じたスタイルクラスを取得
+                let statusClass = "";
+
+                // タグのHTML作成
+                const tagsHtml = project.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
+
+                // リンクのHTML作成
+                const linksHtml = project.urls.map(link =>
+                    `<a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label)}</a>`
+                ).join("");
+
+                tr.innerHTML = `
+                <td><strong>${escapeHtml(project.name)}</strong></td>
+                <td><span class="status ${statusClass}">${escapeHtml(project.status)}</span></td>
+                <td>${escapeHtml(project.description)}</td>
+                <td>${tagsHtml}</td>
+                <td class="links">${linksHtml || "-"}</td>
+            `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        /**
+         * フィルター処理関数
+         */
+        function filterProjects() {
+            const searchText = document.getElementById("searchInput").value.toLowerCase();
+            const selectedStatus = document.getElementById("statusFilter").value;
+
+            const filtered = projectsData.filter(project => {
+                // ステータスフィルター
+                const matchesStatus = selectedStatus === "ALL" || project.status === selectedStatus;
+
+                // 検索テキストフィルター (名前、説明、タグを対象)
+                const matchesSearch =
+                    project.name.toLowerCase().includes(searchText) ||
+                    project.description.toLowerCase().includes(searchText) ||
+                    project.tags.some(tag => tag.toLowerCase().includes(searchText));
+
+                return matchesStatus && matchesSearch;
+            });
+
+            renderProjects(filtered);
+        }
+
+        /**
+         * エスケープ処理 (XSS防止)
+         */
+        function escapeHtml(str) {
+            if (!str) return "";
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // イベントリスナーの登録
+        document.getElementById("searchInput").addEventListener("input", filterProjects);
+        document.getElementById("statusFilter").addEventListener("change", filterProjects);
+
+        // 初期化表示
+        window.onload = function () {
+            renderProjects(projectsData);
+        };
+    </script>
+
 </body>
 
 </html>
