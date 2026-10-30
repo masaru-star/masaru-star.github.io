@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precise Timer Challenge</title>
+</head>
+
+<body>
+
+    <h1>Precise Timer Challenge</h1>
+
+    <div>
+        <button id="startButton">開始</button>
+        <button id="exportButton">JSONエクスポート</button>
+        <button id="importButton">JSONインポート</button>
+        <input type="file" id="importFile" style="display:none" accept=".json">
+    </div>
+
+    <div>
+        <p>状態: <span id="statusText">待機中</span></p>
+        <p>カウント: <span id="timerText">0.000000</span> 秒</p>
+    </div>
+
+    <div>
+        <h2>ランキング </h2>
+        <p>レギュレーション(目標定数): <select id="constantSelect">
+                <option value="3.14159265358979323846264338327950288419716939937510582097494459">LEAGUE-Pi</option>
+            </select></p>
+        <ol id="rankingList"></ol>
+    </div>
+
+    <div>
+        <h3>メッセージログ</h3>
+        <div id="messageBox"></div>
+    </div>
+
+    <script>
+        // Web Audio API helper for synthetic sounds without external assets
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Play tick sound during 5-second countdown
+        function playTickSound() {
+            try {
+                initAudio();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime); // A4
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Play start sound when timer officially begins
+        function playStartSound() {
+            try {
+                initAudio();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
+                osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Play stop sound when timer stops
+        function playStopSound() {
+            try {
+                initAudio();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    </script>
+
+    <script>
+        let gameState = 'IDLE'; // IDLE, WAITING, RUNNING
+        let startTime = 0;
+        let timerInterval = null;
+        let countdownTimeout = null;
+        let countdownInterval = null;
+        let records = []; // Array of recorded times
+
+        const startButton = document.getElementById('startButton');
+        const exportButton = document.getElementById('exportButton');
+        const importButton = document.getElementById('importButton');
+        const importFile = document.getElementById('importFile');
+        const statusText = document.getElementById('statusText');
+        const timerText = document.getElementById('timerText');
+        const rankingList = document.getElementById('rankingList');
+        const constantSelect = document.getElementById('constantSelect');
+        const messageBox = document.getElementById('messageBox');
+
+        function showMessage(msg) {
+            messageBox.innerText = msg;
+        }
+
+        // Start button handler
+        startButton.addEventListener('click', () => {
+            if (gameState !== 'IDLE') return;
+
+            initAudio();
+            gameState = 'WAITING';
+            startButton.disabled = true;
+            statusText.innerText = '5秒待機中... (スペースキーでいつでも停止可能ですがまだカウントは始まっていません)';
+            showMessage('5秒間の待機が開始されました。カウントダウン中のサウンドが鳴ります。');
+
+            let countdownSeconds = 5;
+            playTickSound();
+
+            // Ticks every second for 5 seconds
+            let elapsedTicks = 0;
+            countdownInterval = setInterval(() => {
+                elapsedTicks++;
+                if (elapsedTicks < 5) {
+                    playTickSound();
+                    statusText.innerText = `5秒待機中... 残り ${5 - elapsedTicks} 秒`;
+                }
+            }, 1000);
+
+            // 5 seconds wait timeout
+            countdownTimeout = setTimeout(() => {
+                clearInterval(countdownInterval);
+                if (gameState === 'WAITING') {
+                    gameState = 'RUNNING';
+                    startTime = performance.now();
+                    playStartSound();
+                    statusText.innerText = 'タイマー起動中！スペースキーを押して停止してください。';
+                    showMessage('タイマーが起動しました！スペースキーを押して記録してください。');
+
+                    // High precision timer loop using requestAnimationFrame
+                    function updateTimer() {
+                        if (gameState === 'RUNNING') {
+                            const currentTime = performance.now();
+                            const elapsed = (currentTime - startTime) / 1000;
+                            timerText.innerText = elapsed.toFixed(12);
+                            requestAnimationFrame(updateTimer);
+                        }
+                    }
+                    requestAnimationFrame(updateTimer);
+                }
+            }, 5000);
+        });
+
+        // Space key handler to stop timer or cancel wait
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault(); // Prevent page scrolling
+
+                if (gameState === 'WAITING') {
+                    // Cancel waiting phase
+                    clearTimeout(countdownTimeout);
+                    clearInterval(countdownInterval);
+                    gameState = 'IDLE';
+                    startButton.disabled = false;
+                    statusText.innerText = '待機中に停止されました';
+                    showMessage('5秒待機中にスペースキーが押されたため、キャンセルされました。');
+                    playStopSound();
+                } else if (gameState === 'RUNNING') {
+                    // Stop timer
+                    const endTime = performance.now();
+                    const elapsed = (endTime - startTime) / 1000;
+                    gameState = 'IDLE';
+                    startButton.disabled = false;
+                    statusText.innerText = '停止しました';
+                    timerText.innerText = elapsed.toFixed(12);
+                    playStopSound();
+
+                    // Evaluate score against selected constant
+                    const targetConstant = parseFloat(constantSelect.value);
+                    const diff = Math.abs(elapsed - targetConstant);
+
+                    records.push({
+                        time: elapsed,
+                        target: targetConstant,
+                        diff: diff,
+                        date: new Date().toLocaleTimeString()
+                    });
+
+                    updateRanking();
+                    showMessage(`記録完了: ${elapsed.toFixed(12)} 秒 (目標値との差: ${diff.toFixed(12)})`);
+                }
+            }
+        });
+
+        // Update ranking display based on closeness to constant
+        function updateRanking() {
+            const targetConstant = parseFloat(constantSelect.value);
+
+            // Recalculate differences and sort by closeness (smallest diff first)
+            records.forEach(r => {
+                r.diff = Math.abs(r.time - targetConstant);
+            });
+
+            records.sort((a, b) => a.diff - b.diff);
+
+            rankingList.innerHTML = '';
+            records.forEach((rec, index) => {
+                const li = document.createElement('li');
+                li.innerText = `${index + 1}位: ${rec.time.toFixed(12)} 秒 (目標との差: ${rec.diff.toFixed(12)}) [${rec.date}]`;
+                rankingList.appendChild(li);
+            });
+        }
+
+        constantSelect.addEventListener('change', () => {
+            updateRanking();
+        });
+
+        // Export ranking as JSON
+        exportButton.addEventListener('click', () => {
+            if (records.length === 0) {
+                showMessage('エクスポートする記録がありません。');
+                return;
+            }
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(records, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "timer_ranking.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showMessage('ランキングをJSON形式でエクスポートしました。');
+        });
+
+        // Import ranking from JSON
+        importButton.addEventListener('click', () => {
+            importFile.click();
+        });
+
+        importFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                try {
+                    const importedData = JSON.parse(event.target.result);
+                    if (Array.isArray(importedData)) {
+                        // Merge records and avoid duplicates or simply append
+                        records = records.concat(importedData);
+                        updateRanking();
+                        showMessage(`JSONのインポートに成功しました。${importedData.length}件の記録を統合しました。`);
+                    } else {
+                        showMessage('無効なJSONフォーマットです。');
+                    }
+                } catch (err) {
+                    showMessage('JSONのパースに失敗しました: ' + err.message);
+                }
+                importFile.value = ''; // Reset input
+            };
+            reader.readAsText(file);
+        });
+    </script>
+
+</body>
+
+</html>

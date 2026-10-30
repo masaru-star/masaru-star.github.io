@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/156039860?v=4">
+    <meta charset="UTF-8">
+    <title>電車の窓から… | 真優の開発工廠</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .window-frame {
+            position: relative;
+            width: 80vw;
+            height: 60vh;
+            border: 15px solid #333;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.8);
+            background: linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d);
+        }
+
+        .shake-container {
+            width: 100%;
+            height: 100%;
+            animation: train-idle-shake 4s infinite ease-in-out;
+            transition: transform 0.1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .big-bump {
+            animation: bump-effect 0.5s ease-out !important;
+        }
+
+        .layer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            align-items: flex-end;
+            will-change: transform;
+        }
+
+        .far-view {
+            height: 60%;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        .mountain {
+            flex-shrink: 0;
+            width: 500px;
+            height: 100%;
+            background: #2c3e50;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            margin-right: -150px;
+        }
+
+        .mid-view {
+            height: 45%;
+            z-index: 2;
+        }
+
+        .building {
+            flex-shrink: 0;
+            width: 100px;
+            margin-right: 30px;
+            background: #1c2833;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 5px;
+        }
+
+        .building::after {
+            content: '';
+            height: 90%;
+            background-image: radial-gradient(#f1c40f 20%, transparent 20%);
+            background-size: 15px 15px;
+            opacity: 0.6;
+        }
+
+        .near-view {
+            height: 12%;
+            z-index: 3;
+        }
+
+        .fence {
+            flex-shrink: 0;
+            width: 150px;
+            height: 100%;
+            border-top: 4px solid #000;
+            border-left: 8px solid #000;
+            margin-right: 40px;
+        }
+
+        .glass-reflection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 60%);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        @keyframes train-idle-shake {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            25% {
+                transform: translateY(1px) rotate(0.02deg);
+            }
+
+            50% {
+                transform: translateY(-0.5px) rotate(-0.02deg);
+            }
+
+            75% {
+                transform: translateY(1.5px) rotate(0.04deg);
+            }
+        }
+
+        @keyframes bump-effect {
+            0% {
+                transform: translateY(0);
+            }
+
+            10% {
+                transform: translateY(-8px) rotate(0.5deg);
+            }
+
+            30% {
+                transform: translateY(5px) rotate(-0.3deg);
+            }
+
+            50% {
+                transform: translateY(-2px) rotate(0.1deg);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="window-frame">
+        <div class="glass-reflection"></div>
+        <div class="shake-container" id="shake-container">
+            <div class="layer far-view" id="layer-far"></div>
+            <div class="layer mid-view" id="layer-mid"></div>
+            <div class="layer near-view" id="layer-near"></div>
+        </div>
+    </div>
+
+    <script>
+        const configs = [
+            { id: 'layer-far', speed: 0.8, className: 'mountain', count: 10 },
+            { id: 'layer-mid', speed: 4.5, className: 'building', count: 15 },
+            { id: 'layer-near', speed: 12.0, className: 'fence', count: 20 }
+        ];
+        const layers = configs.map(config => {
+            const element = document.getElementById(config.id);
+            for (let i = 0; i < config.count; i++) {
+                const item = createItem(config.className);
+                element.appendChild(item);
+            }
+            const contentWidth = element.scrollWidth;
+            const cloneNodes = Array.from(element.childNodes).map(node => node.cloneNode(true));
+            cloneNodes.forEach(clone => element.appendChild(clone));
+
+            return {
+                element,
+                x: 0,
+                speed: config.speed,
+                resetWidth: contentWidth
+            };
+        });
+
+        function createItem(className) {
+            const item = document.createElement('div');
+            item.className = className;
+            if (className === 'building') {
+                item.style.height = (Math.random() * 60 + 40) + '%';
+            }
+            return item;
+        }
+        function animate() {
+            layers.forEach(layer => {
+                layer.x -= layer.speed;
+                if (Math.abs(layer.x) >= layer.resetWidth) {
+                    layer.x += layer.resetWidth;
+                }
+                layer.element.style.transform = `translateX(${layer.x}px)`;
+            });
+            requestAnimationFrame(animate);
+        }
+        const shakeContainer = document.getElementById('shake-container');
+        function triggerRandomBump() {
+            if (shakeContainer.classList.contains('big-bump')) return;
+
+            shakeContainer.classList.add('big-bump');
+            setTimeout(() => {
+                shakeContainer.classList.remove('big-bump');
+                scheduleNextBump();
+            }, 500);
+        }
+        function scheduleNextBump() {
+            const nextTime = 3000 + Math.random() * 9000;
+            setTimeout(triggerRandomBump, nextTime);
+        }
+
+        window.onload = () => {
+            animate();
+            scheduleNextBump();
+        };
+    </script>
+</body>
+
+</html>

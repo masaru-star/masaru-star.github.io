@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M式箱庭諸島 -改-</title>
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #e2e8f0;
+            --panel-border-light: #ffffff;
+            --panel-border-dark: #64748b;
+            --panel-border-darker: #334155;
+            --text-color: #0f172a;
+            --primary: #0284c7;
+            --danger: #dc2626;
+            --grid-line: #64748b;
+            --sea: #38bdf8;
+            --wasteland: #a8a29e;
+            --plain: #4ade80;
+            --forest: #15803d;
+            --mountain: #78716c;
+            --village: #fef08a;
+            --town: #fbbf24;
+            --city: #eab308;
+            --factory: #f97316;
+            --farm: #b8d200;
+            --base: #a855f7;
+            --port: #0ea5e9;
+        }
+
+        body {
+            font-family: "MS PGothic", "Osaka", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 8px;
+            border-bottom: 2px groove var(--panel-border-dark);
+            width: 100%;
+            max-width: 1200px;
+            padding-bottom: 4px;
+            background: #cbd5e1;
+            border-top: 2px groove var(--panel-border-light);
+            border-left: 2px groove var(--panel-border-light);
+            border-right: 2px groove var(--panel-border-dark);
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            margin: 4px 0;
+            color: #1e293b;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .retro-panel {
+            background-color: var(--panel-bg);
+            border-top: 2px solid var(--panel-border-light);
+            border-left: 2px solid var(--panel-border-light);
+            border-right: 2px solid var(--panel-border-dark);
+            border-bottom: 2px solid var(--panel-border-dark);
+            padding: 10px;
+            box-sizing: border-box;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar {
+            width: 270px;
+            font-size: 0.85rem;
+        }
+
+        .sidebar h2 {
+            font-size: 0.9rem;
+            margin: 0 0 6px 0;
+            border-bottom: 1px solid var(--panel-border-dark);
+            padding-bottom: 2px;
+            background-color: #94a3b8;
+            color: #fff;
+            padding-left: 4px;
+        }
+
+        .palette-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .palette-btn {
+            background-color: #f8fafc;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #64748b;
+            border-bottom: 1px solid #64748b;
+            padding: 5px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .palette-btn:active {
+            border-top: 1px solid #64748b;
+            border-left: 1px solid #64748b;
+            border-right: 1px solid #fff;
+            border-bottom: 1px solid #fff;
+            background-color: #e2e8f0;
+        }
+
+        .palette-btn.active {
+            border: 2px inset var(--danger);
+            background-color: #fee2e2;
+            font-weight: bold;
+        }
+
+        .palette-preview {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #333;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .action-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        button.action-btn {
+            background-color: #e2e8f0;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #475569;
+            border-bottom: 1px solid #475569;
+            padding: 5px 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        button.action-btn:active {
+            border-top: 1px solid #475569;
+            border-left: 1px solid #475569;
+            border-right: 1px solid #fff;
+            border-bottom: 1px solid #fff;
+        }
+
+        .stats-box {
+            font-size: 0.8rem;
+            background: #fff;
+            border: 2px inset var(--panel-border-dark);
+            padding: 6px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            max-width: 850px;
+        }
+
+        .map-viewport {
+            width: 100%;
+            height: 520px;
+            overflow: auto;
+            border: 2px inset var(--panel-border-dark);
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        .offset-grid-container {
+            position: relative;
+            padding: 15px;
+            width: max-content;
+            margin: 0 auto;
+        }
+
+        .grid-row {
+            display: flex;
+            margin-bottom: 0px;
+            /* 隙間なし */
+        }
+
+        /* 奇数行を右にずらすオフセット構造（Hex隣接モデルに合致） */
+        .grid-row.offset-row {
+            padding-left: 15px;
+            /* セル幅の半分程度 */
+        }
+
+        .map-cell {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--grid-line);
+            margin-right: 0px;
+            /* 隙間なし */
+            margin-bottom: 0px;
+            box-sizing: border-box;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        .map-cell:hover {
+            outline: 2px dashed #0284c7;
+            z-index: 5;
+        }
+
+        .map-cell.selected {
+            outline: 3px solid var(--danger);
+            z-index: 10;
+        }
+
+        .map-cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            /* カーソルを下に透過させてポインターを維持 */
+        }
+
+        .bg-sea {
+            background-color: var(--sea);
+            color: #fff;
+        }
+
+        .bg-wasteland {
+            background-color: var(--wasteland);
+            color: #44403c;
+        }
+
+        .bg-plain {
+            background-color: var(--plain);
+            color: #14532d;
+        }
+
+        .bg-forest {
+            background-color: var(--forest);
+            color: #dcfce7;
+        }
+
+        .bg-mountain {
+            background-color: var(--mountain);
+            color: #f5f5f4;
+        }
+
+        .bg-village {
+            background-color: var(--village);
+            color: #713f12;
+        }
+
+        .bg-town {
+            background-color: var(--town);
+            color: #78350f;
+        }
+
+        .bg-city {
+            background-color: var(--city);
+            color: #451a03;
+        }
+
+        .bg-factory {
+            background-color: var(--factory);
+            color: #fff;
+        }
+
+        .bg-base {
+            background-color: var(--base);
+            color: #fff;
+        }
+
+        .bg-port {
+            background-color: var(--port);
+            color: #fff;
+        }
+
+        .bg-farm {
+            background-color: var(--farm);
+            color: #b8d200;
+        }
+
+        .info-panel {
+            margin-top: 8px;
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 6px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            border: 2px inset var(--panel-border-dark);
+            height: 70px;
+            overflow-y: auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--panel-bg);
+            border-top: 2px solid var(--panel-border-light);
+            border-left: 2px solid var(--panel-border-light);
+            border-right: 2px solid var(--panel-border-darker);
+            border-bottom: 2px solid var(--panel-border-darker);
+            padding: 15px;
+            width: 340px;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--panel-border-dark);
+            padding-bottom: 4px;
+            background: #94a3b8;
+            color: #fff;
+            padding-left: 4px;
+        }
+
+        .modal-content input[type="text"] {
+            width: 100%;
+            padding: 4px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 12px;
+            border: 1px inset var(--panel-border-dark);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>M式箱庭諸島 -改- Ver0.1.0Beta</h1>
+        <p style="font-size: 0.75rem; margin: 2px 0 4px 0; color: #334155;">現在ただのマップエディタ</p>
+    </header>
+
+    <div class="container">
+        <!-- サイドバー -->
+        <div class="retro-panel sidebar">
+            <h2>地形パレット</h2>
+            <div class="palette-group" id="paletteContainer"></div>
+
+            <h2>島統計データ</h2>
+            <div class="stats-box" id="statsBox">
+                資金: $10,000<br>
+                人口: 0人<br>
+                面積: 289マス
+            </div>
+
+            <h2>操作メニュー</h2>
+            <div class="action-group">
+                <button class="action-btn" id="btnInitMap" style="background:#fef08a;">初期化(再生成)</button>
+                <button class="action-btn" id="btnFillSea">全体を海にする</button>
+                <button class="action-btn" id="btnFillPlain">全体を平地に作業</button>
+                <button class="action-btn" id="btnExport">JSON出力/保存</button>
+                <button class="action-btn" id="btnImport">JSON読込</button>
+                <button class="action-btn" id="btnClearImg">カスタム画像を全クリア</button>
+            </div>
+
+            <h2>隣接マス検査</h2>
+            <div class="action-group">
+                <button class="action-btn" id="btnCheckNeighbors">選択マスの6方向隣接検査</button>
+            </div>
+        </div>
+
+        <!-- メインマップ画面 -->
+        <div class="retro-panel main-content">
+            <div
+                style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 4px; font-size: 0.8rem;">
+                <span id="selectedCoordInfo">選択: なし</span>
+                <span>アクティブツール: <span id="currentToolName"
+                        style="font-weight:bold; color:var(--primary);">平地</span></span>
+            </div>
+            <div class="map-viewport">
+                <div class="offset-grid-container" id="offsetGrid">
+                    <!-- マス描画エリア -->
+                </div>
+            </div>
+            <div class="info-panel" id="logPanel">
+                [システム] 初期化完了。オフセットグリッド（内部6方向隣接モデル）で動作しています。
+            </div>
+        </div>
+    </div>
+
+    <!-- 画像変更用モーダル -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <h3>カスタム画像の挿入</h3>
+            <p style="font-size: 0.8rem;">対象マス (<span id="modalCoord"></span>) に表示する画像URLを入力してください。</p>
+            <input type="text" id="imageUrlInput" placeholder="https://example.com/tile.png">
+            <div class="modal-buttons">
+                <button class="action-btn" id="modalClearBtn">カスタム削除</button>
+                <button class="action-btn" id="modalCancelBtn">キャンセル</button>
+                <button class="action-btn" id="modalSaveBtn" style="background:#0284c7; color:#fff;">適用</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="importFileInput" accept=".json" style="display:none;">
+
+    <script>
+        const MAP_SIZE = 17;
+        const STORAGE_KEY = 'hakoniwa_island_map_data';
+
+        // 地形タイプ定義
+        const TERRAIN_TYPES = {
+            sea: { id: 'sea', name: '海', class: 'bg-sea', text: '海', cost: 100, defaultImg: 'sea1.gif' },
+            wasteland: { id: 'wasteland', name: '荒れ地', class: 'bg-wasteland', text: '荒', cost: 100, defaultImg: 'waste.gif' },
+            plain: { id: 'plain', name: '平地', class: 'bg-plain', text: '平', cost: 100, defaultImg: 'plain.gif' },
+            forest: { id: 'forest', name: '森', class: 'bg-forest', text: '森', cost: 200, defaultImg: 'forest.gif' },
+            mountain: { id: 'mountain', name: '山', class: 'bg-mountain', text: '山', cost: 500, defaultImg: 'mountain.gif' },
+            village: { id: 'village', name: '村', class: 'bg-village', text: '村', cost: 500, defaultImg: 'pop1.gif' },
+            town: { id: 'town', name: '町', class: 'bg-town', text: '町', cost: 1000, defaultImg: 'pop2.gif' },
+            city: { id: 'city', name: '都市', class: 'bg-city', text: '都', cost: 3000, defaultImg: 'pop3.gif' },
+            factory: { id: 'factory', name: '工場', class: 'bg-factory', text: '工', cost: 2000, defaultImg: 'factory.gif' },
+            farm: { id: 'farm', name: '農場', class: 'bg-farm', text: '農', cost: 2000, defaultImg: 'farm.gif' },
+            base: { id: 'base', name: '基地', class: 'bg-base', text: '基', cost: 5000, defaultImg: 'base.gif' },
+            port: { id: 'port', name: '港', class: 'bg-port', text: '港', cost: 1500, defaultImg: 'port.gif' }
+        };
+
+        let currentTool = 'plain';
+        let mapData = [];
+        let selectedCell = null;
+        let isMouseDown = false;
+
+        // 初期化(再生成): 中央寄り(7x7領域)に荒れ地10, 平地22, 森4, 村2 をランダム配置、他は海
+        function initMapData() {
+            mapData = [];
+            for (let y = 0; y < MAP_SIZE; y++) {
+                let row = [];
+                for (let x = 0; x < MAP_SIZE; x++) {
+                    row.push({ type: 'sea', customImg: null });
+                }
+                mapData.push(row);
+            }
+
+            // 中央7x7（x: 5~11, y: 5~11）の座標リストを作成
+            let centerCoords = [];
+            for (let y = 5; y <= 11; y++) {
+                for (let x = 5; x <= 11; x++) {
+                    centerCoords.push({ x, y });
+                }
+            }
+
+            // シャッフル
+            for (let i = centerCoords.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [centerCoords[i], centerCoords[j]] = [centerCoords[j], centerCoords[i]];
+            }
+
+            // 地形の内訳: 荒れ地10, 平地22, 森4, 村2 (計38マス)
+            const terrainList = [
+                ...Array(10).fill('wasteland'),
+                ...Array(22).fill('plain'),
+                ...Array(4).fill('forest'),
+                ...Array(2).fill('village')
+            ];
+
+            terrainList.forEach((type, idx) => {
+                if (idx < centerCoords.length) {
+                    const c = centerCoords[idx];
+                    mapData[c.y][c.x].type = type;
+                }
+            });
+
+            saveToStorage();
+        }
+
+        function loadFromStorage() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length === MAP_SIZE) {
+                        mapData = parsed;
+                        return true;
+                    }
+                }
+            } catch (e) {
+                console.error("Storage load error:", e);
+            }
+            return false;
+        }
+
+        function saveToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(mapData));
+            } catch (e) {
+                console.error("Storage save error:", e);
+            }
+        }
+
+        function buildPalette() {
+            const container = document.getElementById('paletteContainer');
+            container.innerHTML = '';
+            for (let key in TERRAIN_TYPES) {
+                let terrain = TERRAIN_TYPES[key];
+                let btn = document.createElement('button');
+                btn.className = `palette-btn ${key === currentTool ? 'active' : ''}`;
+                btn.dataset.tool = key;
+                btn.innerHTML = `<span class="palette-preview ${terrain.class}"></span><span>${terrain.name}</span>`;
+                btn.addEventListener('click', () => setTool(key));
+                container.appendChild(btn);
+            }
+        }
+
+        function setTool(toolKey) {
+            currentTool = toolKey;
+            document.querySelectorAll('.palette-btn').forEach(b => {
+                if (b.dataset.tool === toolKey) {
+                    b.classList.add('active');
+                } else {
+                    b.classList.remove('active');
+                }
+            });
+            document.getElementById('currentToolName').innerText = TERRAIN_TYPES[toolKey].name;
+            logMessage(`ツールを [${TERRAIN_TYPES[toolKey].name}] に変更しました。`);
+        }
+
+        function renderGrid() {
+            const container = document.getElementById('offsetGrid');
+            container.innerHTML = '';
+
+            for (let y = 0; y < MAP_SIZE; y++) {
+                let rowDiv = document.createElement('div');
+                let isOffset = (y % 2 !== 0);
+                rowDiv.className = `grid-row ${isOffset ? 'offset-row' : ''}`;
+
+                for (let x = 0; x < MAP_SIZE; x++) {
+                    let cellData = mapData[y][x];
+                    let terrain = TERRAIN_TYPES[cellData.type] || TERRAIN_TYPES.plain;
+
+                    let cellDiv = document.createElement('div');
+                    cellDiv.className = `map-cell ${terrain.class}`;
+                    cellDiv.dataset.x = x;
+                    cellDiv.dataset.y = y;
+
+                    let activeImgSrc = cellData.customImg !== null ? cellData.customImg : terrain.defaultImg;
+
+                    if (activeImgSrc) {
+                        let img = document.createElement('img');
+                        img.src = activeImgSrc;
+                        img.onerror = function () {
+                            this.remove();
+                            cellDiv.innerText = terrain.text;
+                        };
+                        cellDiv.appendChild(img);
+                    } else {
+                        cellDiv.innerText = terrain.text;
+                    }
+
+                    if (selectedCell && selectedCell.x === x && selectedCell.y === y) {
+                        cellDiv.classList.add('selected');
+                    } else {
+                        cellDiv.classList.remove('selected');
+                    }
+
+                    cellDiv.addEventListener('mousedown', (e) => {
+                        isMouseDown = true;
+                        handleCellAction(x, y, e);
+                    });
+                    cellDiv.addEventListener('mouseenter', (e) => {
+                        if (isMouseDown) handleCellAction(x, y, e);
+                    });
+                    cellDiv.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        openImageModal(x, y);
+                    });
+
+                    rowDiv.appendChild(cellDiv);
+                }
+                container.appendChild(rowDiv);
+            }
+
+            updateStats();
+        }
+
+        function handleCellAction(x, y, e) {
+            if (e.shiftKey) {
+                openImageModal(x, y);
+                isMouseDown = false;
+                return;
+            }
+
+            selectedCell = { x, y };
+            document.getElementById('selectedCoordInfo').innerText = `選択: (${x}, ${y}) [${TERRAIN_TYPES[mapData[y][x].type].name}]`;
+
+            if (mapData[y][x].type !== currentTool) {
+                mapData[y][x].type = currentTool;
+                saveToStorage();
+                renderGrid();
+            }
+        }
+
+        function getOffsetNeighbors(x, y) {
+            let isOdd = (y % 2 !== 0);
+            let offsets;
+
+            if (!isOdd) {
+                offsets = [
+                    { name: '北西', dx: -1, dy: -1 },
+                    { name: '北東', dx: 0, dy: -1 },
+                    { name: '西', dx: -1, dy: 0 },
+                    { name: '東', dx: 1, dy: 0 },
+                    { name: '南西', dx: -1, dy: 1 },
+                    { name: '南東', dx: 0, dy: 1 }
+                ];
+            } else {
+                offsets = [
+                    { name: '北西', dx: 0, dy: -1 },
+                    { name: '北東', dx: 1, dy: -1 },
+                    { name: '西', dx: -1, dy: 0 },
+                    { name: '東', dx: 1, dy: 0 },
+                    { name: '南西', dx: 0, dy: 1 },
+                    { name: '南東', dx: 1, dy: 1 }
+                ];
+            }
+
+            let validNeighbors = [];
+            for (let off of offsets) {
+                let nx = x + off.dx;
+                let ny = y + off.dy;
+                if (nx >= 0 && nx < MAP_SIZE && ny >= 0 && ny < MAP_SIZE) {
+                    validNeighbors.push({ x: nx, y: ny, name: off.name, type: mapData[ny][nx].type });
+                }
+            }
+            return validNeighbors;
+        }
+
+        function checkNeighbors() {
+            if (!selectedCell) {
+                logMessage("エラー: マスが選択されていません。");
+                return;
+            }
+
+            let { x, y } = selectedCell;
+            let neighbors = getOffsetNeighbors(x, y);
+            logMessage(`--- 地点 (${x}, ${y}) の6方向隣接検査 (計${neighbors.length}マス) ---`);
+
+            for (let n of neighbors) {
+                logMessage(`  [${n.name}] (${n.x}, ${n.y}): ${TERRAIN_TYPES[n.type].name}`);
+            }
+        }
+
+        function updateStats() {
+            let counts = {};
+            for (let k in TERRAIN_TYPES) counts[k] = 0;
+
+            for (let y = 0; y < MAP_SIZE; y++) {
+                for (let x = 0; x < MAP_SIZE; x++) {
+                    let t = mapData[y][x].type;
+                    if (counts[t] !== undefined) counts[t]++;
+                }
+            }
+
+            let population = (counts.village || 0) * 50 + (counts.town || 0) * 200 + (counts.city || 0) * 1000 + (counts.factory || 0) * 100;
+            let funds = 10000 + (counts.port || 0) * 500 - (counts.town || 0) * 50 - (counts.city || 0) * 200;
+
+            // 港の数表示を消去し、新地形を反映
+            document.getElementById('statsBox').innerHTML = `
+                資金: $${funds.toLocaleString()}<br>
+                推定人口: ${population.toLocaleString()} 人<br>
+                村:${counts.village} 町:${counts.town} 都市:${counts.city} 工場:${counts.factory}<br>
+                荒:${counts.wasteland} 平:${counts.plain} 森:${counts.forest} 山:${counts.mountain} 海:${counts.sea}
+            `;
+        }
+
+        function logMessage(msg) {
+            const panel = document.getElementById('logPanel');
+            panel.innerHTML += `<br>&gt; ${msg}`;
+            panel.scrollTop = panel.scrollHeight;
+        }
+
+        let activeModalCoord = null;
+        function openImageModal(x, y) {
+            activeModalCoord = { x, y };
+            document.getElementById('modalCoord').innerText = `(${x}, ${y})`;
+            document.getElementById('imageUrlInput').value = mapData[y][x].customImg || '';
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        document.getElementById('modalCancelBtn').addEventListener('click', () => {
+            document.getElementById('imageModal').style.display = 'none';
+        });
+
+        document.getElementById('modalClearBtn').addEventListener('click', () => {
+            if (activeModalCoord) {
+                mapData[activeModalCoord.y][activeModalCoord.x].customImg = null;
+                logMessage(`地点 (${activeModalCoord.x}, ${activeModalCoord.y}) のカスタム画像を削除しました。`);
+                saveToStorage();
+                renderGrid();
+            }
+            document.getElementById('imageModal').style.display = 'none';
+        });
+
+        document.getElementById('modalSaveBtn').addEventListener('click', () => {
+            if (activeModalCoord) {
+                let url = document.getElementById('imageUrlInput').value.trim();
+                mapData[activeModalCoord.y][activeModalCoord.x].customImg = url ? url : null;
+                logMessage(`地点 (${activeModalCoord.x}, ${activeModalCoord.y}) にカスタム画像を設定しました。`);
+                saveToStorage();
+                renderGrid();
+            }
+            document.getElementById('imageModal').style.display = 'none';
+        });
+
+        document.getElementById('btnInitMap').addEventListener('click', () => {
+            if (confirm("島を初期化して再生成しますか？（現在の配置はリセットされます）")) {
+                initMapData();
+                renderGrid();
+                logMessage("島を初期化（再生成）しました。");
+            }
+        });
+
+        document.getElementById('btnFillSea').addEventListener('click', () => {
+            if (confirm("マップ全体を海にしますか？")) {
+                for (let y = 0; y < MAP_SIZE; y++) for (let x = 0; x < MAP_SIZE; x++) mapData[y][x].type = 'sea';
+                saveToStorage();
+                renderGrid();
+                logMessage("マップ全体を海に変更しました。");
+            }
+        });
+
+        document.getElementById('btnFillPlain').addEventListener('click', () => {
+            if (confirm("マップ全体を平地にしますか？")) {
+                for (let y = 0; y < MAP_SIZE; y++) for (let x = 0; x < MAP_SIZE; x++) mapData[y][x].type = 'plain';
+                saveToStorage();
+                renderGrid();
+                logMessage("マップ全体を平地に変更しました。");
+            }
+        });
+
+        document.getElementById('btnClearImg').addEventListener('click', () => {
+            if (confirm("すべてのカスタム画像をクリアしますか？")) {
+                for (let y = 0; y < MAP_SIZE; y++) for (let x = 0; x < MAP_SIZE; x++) mapData[y][x].customImg = null;
+                saveToStorage();
+                renderGrid();
+                logMessage("全マスのカスタム画像をクリアしました。");
+            }
+        });
+
+        document.getElementById('btnExport').addEventListener('click', () => {
+            let jsonStr = JSON.stringify(mapData, null, 2);
+            let blob = new Blob([jsonStr], { type: 'application/json' });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'offset_hakoniwa_map.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            logMessage("マップデータをJSONファイルに出力しました。");
+        });
+
+        document.getElementById('btnImport').addEventListener('click', () => {
+            document.getElementById('importFileInput').click();
+        });
+
+        document.getElementById('importFileInput').addEventListener('change', (e) => {
+            let file = e.target.files[0];
+            if (!file) return;
+            let reader = new FileReader();
+            reader.onload = function (evt) {
+                try {
+                    let imported = JSON.parse(evt.target.result);
+                    if (Array.isArray(imported) && imported.length === MAP_SIZE) {
+                        mapData = imported;
+                        saveToStorage();
+                        renderGrid();
+                        logMessage("JSONファイルからマップデータを読み込みました。");
+                    } else {
+                        logMessage("エラー: マップサイズが一致しません。");
+                    }
+                } catch (err) {
+                    logMessage("エラー: JSONファイルの解析に失敗しました。");
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+        document.getElementById('btnCheckNeighbors').addEventListener('click', checkNeighbors);
+
+        window.addEventListener('mouseup', () => { isMouseDown = false; });
+
+        window.onload = function () {
+            if (!loadFromStorage()) {
+                initMapData();
+            }
+            buildPalette();
+            renderGrid();
+        };
+    </script>
+</body>
+
+</html>

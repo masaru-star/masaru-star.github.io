@@ -4,325 +4,527 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>真優の開発工廠 | TOP-稼働中プロジェクト一覧</title>
+    <title>Welcome | 真優の開発工廠</title>
+    <!-- Three.js for 3D flight rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        :root {
-            --bg-color: #fcfcfc;
-            --text-color: #222222;
-            --border-color: #dddddd;
-            --accent-color: #0066cc;
-            --sub-text: #666666;
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
         }
 
         body {
-            font-family: var(--font-family);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 24px;
-            line-height: 1.5;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        header {
-            margin-bottom: 24px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 16px;
-        }
-
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 0 0 8px 0;
-        }
-
-        p.description {
-            margin: 0;
-            color: var(--sub-text);
-            font-size: 0.9rem;
-        }
-
-        /* フィルター・検索エリア */
-        .controls {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        input[type="text"],
-        select {
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 0.9rem;
-            background-color: #fff;
-            color: var(--text-color);
-            outline: none;
-        }
-
-        input[type="text"]:focus,
-        select:focus {
-            border-color: var(--accent-color);
-        }
-
-        input[type="text"] {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        /* テーブル形式のリスト */
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
             width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 0.9rem;
+            min-height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        th,
-        td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border-color);
-            vertical-align: top;
+        .content-container {
+            position: relative;
+            z-index: 20;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px 200px 20px;
         }
 
-        th {
-            font-weight: 600;
-            color: var(--sub-text);
-            background-color: #f7f7f7;
-            border-top: 1px solid var(--border-color);
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
         }
 
-        /* ステータスバッジ（最小限の文字装飾） */
-        .status {
-            font-size: 0.8rem;
-            padding: 2px 6px;
-            border-radius: 3px;
-            border: 1px solid var(--border-color);
-            display: inline-block;
-            white-space: nowrap;
+        /* 背景キャンバス */
+        #flight-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        /* タグ */
-        .tag {
-            display: inline-block;
-            font-size: 0.75rem;
-            color: var(--sub-text);
-            background-color: #eeeeee;
-            padding: 2px 6px;
-            margin-right: 4px;
-            margin-bottom: 2px;
-            border-radius: 3px;
-        }
-
-        .links a {
-            color: var(--accent-color);
-            text-decoration: none;
-            margin-right: 8px;
-            font-size: 0.85rem;
-        }
-
-        .links a:hover {
-            text-decoration: underline;
-        }
-
-        .empty-message {
+        /* 下部時計エリア */
+        .clock-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
             text-align: center;
-            padding: 32px;
-            color: var(--sub-text);
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .clock-time {
+            font-size: 48px;
+            font-weight: bold;
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+
+        .clock-date {
+            font-size: 16px;
+            margin-top: 4px;
+            opacity: 0.9;
+        }
+
+        .motion-toggle-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #334155;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            user-select: none;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 22px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: .3s;
+            border-radius: 22px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #38bdf8;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(18px);
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <header>
-            <h1>プロジェクト管理状況</h1>
-            <p>真優の開発工廠へようこそ。<br>現在、サイトを段階的に改装しています。</p>
-        </header>
-
-        <!-- コントロールエリア -->
-        <div class="controls">
-            <input type="text" id="searchInput" placeholder="プロジェクト名や概要で検索...">
-            <select id="statusFilter">
-                <option value="ALL">すべてのステータス</option>
-                <option value="稼働中">稼働中</option>
-                <option value="一時閉鎖中">一時閉鎖中</option>
-                <option value="更新停止">更新停止</option>
-            </select>
-        </div>
-
-        <!-- テーブルエリア -->
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 25%;">プロジェクト名</th>
-                        <th style="width: 12%;">ステータス</th>
-                        <th style="width: 35%;">概要</th>
-                        <th style="width: 15%;">技術 / タグ</th>
-                        <th style="width: 13%;">リンク</th>
-                    </tr>
-                </thead>
-                <tbody id="projectTableBody">
-                    <!-- JSで動的に追加されます -->
-                </tbody>
-            </table>
-            <div id="noDataMessage" class="empty-message" style="display: none;">
-                該当するプロジェクトは見つかりませんでした。
+    <div class="content-container">
+        <div class="card">
+            <div class="motion-toggle-container">
+                <span>画面酔い防止モード</span>
+                <label class="switch">
+                    <input type="checkbox" id="motion-toggle">
+                    <span class="slider"></span>
+                </label>
             </div>
+            <h1>Ideas into Reality.</h1>
+            <p>
+                興味を持ったことを、考え、調べ、形にする。<br>masarulab.comは、真優が制作した作品やプロジェクトを公開する個人活動拠点です。<br>プログラミング、ゲーム開発、デジタル創作など、さまざまな分野の活動を紹介しています。<br>まだ見ぬ作品との出会いを、ここから。
+            </p>
         </div>
+
     </div>
-<!-- BEGIN AADS AD UNIT 2460134 -->
+    <canvas id="flight-canvas"></canvas>
 
-<div style="position: absolute; z-index: 99999">
-      <input autocomplete="off" type="checkbox" id="aadsstickymvq6tp5g" hidden />
-      <div style="padding-top: 0; padding-bottom: auto;">
-        <div style="width:100%;height:auto;position:fixed;text-align:center;font-size:0;bottom:0;left:0;right:0;margin:auto">
-          <label for="aadsstickymvq6tp5g" style="top: 50%;transform: translateY(-50%);right:24px;; position: absolute;border-radius: 4px; background: rgba(248, 248, 249, 0.70); padding: 4px;z-index: 99999;cursor:pointer">
-            <svg fill="#000000" height="16px" width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 490">
-              <polygon points="456.851,0 245,212.564 33.149,0 0.708,32.337 212.669,245.004 0.708,457.678 33.149,490 245,277.443 456.851,490 489.292,457.678 277.331,245.004 489.292,32.337 "/>
-            </svg>
-          </label>
-          <div id="frame" style="width: 100%;margin: auto;position: relative; z-index: 99998;"><iframe data-aa=2460134 src=//acceptable.a-ads.com/2460134/?size=Adaptive style='border:0; padding:0; width:70%; height:auto; overflow:hidden; margin: auto'></iframe></div>
+    <footer>
+        <div class="clock-container">
+            <div id="clock-time" class="clock-time">00:00:00</div>
+            <div id="clock-date" class="clock-date">----/--/-- (-)</div>
         </div>
-        <style>
-      #aadsstickymvq6tp5g:checked + div {
-        display: none;
-      }
-    </style>
-    </div></div>
+    </footer>
 
-<!-- END AADS AD UNIT 2460134 -->
     <script>
-        const projectsData = [
-            {
-                id: "proj-001",
-                name: "M式箱庭諸島",
-                status: "更新停止",
-                description: "他方面のアップデートを優先します。",
-                tags: ["JavaScript", "TypeScript", "Supabase"],
-                urls: []
+        let scene, camera, renderer;
+        let clouds = [];
+        let groundObjects = [];
+        let starSystem;
+        let ambientLight, sunLight;
+
+        let pitch = 0.0;
+        let targetPitch = 0.0;
+        let speed = 480;
+
+        let isDragging = false;
+        let startY = 0;
+        let lastScrollY = window.scrollY;
+        let isMotionDisabled = false;
+
+        // 時間帯に応じたカラー設定
+        const THEMES = {
+            morning: {
+                skyColor: new THREE.Color(0x38bdf8),
+                fogColor: new THREE.Color(0xbae6fd),
+                lightColor: 0xffffff,
+                lightIntensity: 1.1,
+                starsOpacity: 0.0
             },
-            {
-                id: "proj-002",
-                name: "SNSProject Mirror",
-                status: "稼働中",
-                description: "Ayaneko氏の作成した掲示板サイト。アップデート時期は未定とのこと。",
-                tags: ["JavaScript", "Supabase"],
-                urls: []
+            sunset: {
+                skyColor: new THREE.Color(0xf97316),
+                fogColor: new THREE.Color(0xfde047),
+                lightColor: 0xffedd5,
+                lightIntensity: 0.85,
+                starsOpacity: 0.2
             },
-            {
-                id: "proj-003",
-                name: "ADAエコシステム 公式サイト",
-                status: "更新停止",
-                description: "評議会員の判断によります。",
-                tags: ["JavaScript"],
-                urls: []
-            },
-            {
-                id: "proj-004",
-                name: "メインドメイン・真優の開発工廠",
-                status: "一時閉鎖中",
-                description: "優先して改装を行います。今月中に済ませたい。",
-                tags: ["JavaScript"],
-                urls: []
+            night: {
+                // 暗すぎない夜風の深い紺黒
+                skyColor: new THREE.Color(0x1e293b),
+                fogColor: new THREE.Color(0x334155),
+                lightColor: 0x94a3b8,
+                lightIntensity: 0.6,
+                starsOpacity: 0.95
             }
-        ];
-        function renderProjects(projects) {
-            const tbody = document.getElementById("projectTableBody");
-            const noDataMessage = document.getElementById("noDataMessage");
-            tbody.innerHTML = "";
-
-            if (projects.length === 0) {
-                noDataMessage.style.display = "block";
-                return;
-            } else {
-                noDataMessage.style.display = "none";
-            }
-
-            projects.forEach(project => {
-                const tr = document.createElement("tr");
-
-                // ステータスに応じたスタイルクラスを取得
-                let statusClass = "";
-
-                // タグのHTML作成
-                const tagsHtml = project.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
-
-                // リンクのHTML作成
-                const linksHtml = project.urls.map(link =>
-                    `<a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label)}</a>`
-                ).join("");
-
-                tr.innerHTML = `
-                <td><strong>${escapeHtml(project.name)}</strong></td>
-                <td><span class="status ${statusClass}">${escapeHtml(project.status)}</span></td>
-                <td>${escapeHtml(project.description)}</td>
-                <td>${tagsHtml}</td>
-                <td class="links">${linksHtml || "-"}</td>
-            `;
-
-                tbody.appendChild(tr);
-            });
-        }
-
-        /**
-         * フィルター処理関数
-         */
-        function filterProjects() {
-            const searchText = document.getElementById("searchInput").value.toLowerCase();
-            const selectedStatus = document.getElementById("statusFilter").value;
-
-            const filtered = projectsData.filter(project => {
-                // ステータスフィルター
-                const matchesStatus = selectedStatus === "ALL" || project.status === selectedStatus;
-
-                // 検索テキストフィルター (名前、説明、タグを対象)
-                const matchesSearch =
-                    project.name.toLowerCase().includes(searchText) ||
-                    project.description.toLowerCase().includes(searchText) ||
-                    project.tags.some(tag => tag.toLowerCase().includes(searchText));
-
-                return matchesStatus && matchesSearch;
-            });
-
-            renderProjects(filtered);
-        }
-
-        /**
-         * エスケープ処理 (XSS防止)
-         */
-        function escapeHtml(str) {
-            if (!str) return "";
-            return String(str)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-        // イベントリスナーの登録
-        document.getElementById("searchInput").addEventListener("input", filterProjects);
-        document.getElementById("statusFilter").addEventListener("change", filterProjects);
-
-        // 初期化表示
-        window.onload = function () {
-            renderProjects(projectsData);
         };
-    </script>
 
+        let currentSky = new THREE.Color();
+        let currentFog = new THREE.Color();
+        let targetSkyColor = THEMES.morning.skyColor;
+        let targetFogColor = THEMES.morning.fogColor;
+
+        function initFlightSim() {
+            const canvas = document.getElementById('flight-canvas');
+
+            scene = new THREE.Scene();
+
+            currentSky.copy(THEMES.morning.skyColor);
+            currentFog.copy(THEMES.morning.fogColor);
+            scene.background = currentSky;
+            scene.fog = new THREE.FogExp2(currentFog, 0.0004);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 8000);
+            camera.position.set(0, 300, 0);
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+            scene.add(ambientLight);
+
+            sunLight = new THREE.DirectionalLight(0xffffff, 1.0);
+            sunLight.position.set(200, 1000, -500);
+            scene.add(sunLight);
+
+            // 地面ベース
+            const groundGeo = new THREE.PlaneGeometry(10000, 10000);
+            const groundMat = new THREE.MeshLambertMaterial({ color: 0x15803d });
+            const ground = new THREE.Mesh(groundGeo, groundMat);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -400;
+            scene.add(ground);
+
+            // 道路
+            const roadGeo = new THREE.PlaneGeometry(120, 10000);
+            const roadMat = new THREE.MeshLambertMaterial({ color: 0x334155 });
+            const road = new THREE.Mesh(roadGeo, roadMat);
+            road.rotation.x = -Math.PI / 2;
+            road.position.set(0, -399, 0);
+            scene.add(road);
+
+            // 星空
+            const starGeo = new THREE.BufferGeometry();
+            const starCount = 800;
+            const starPositions = new Float32Array(starCount * 3);
+            for (let i = 0; i < starCount * 3; i += 3) {
+                starPositions[i] = (Math.random() - 0.5) * 6000;
+                starPositions[i + 1] = Math.random() * 2000 + 300;
+                starPositions[i + 2] = (Math.random() - 0.5) * 6000;
+            }
+            starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+            const starMat = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 3,
+                transparent: true,
+                opacity: 0.0
+            });
+            starSystem = new THREE.Points(starGeo, starMat);
+            scene.add(starSystem);
+
+            // 地上オブジェクト（家・樹木）の生成
+            createGroundObjects();
+
+            // 雲の生成
+            createClouds();
+
+            // 時間帯判定・時計の初期化
+            updateClockAndTheme();
+            setInterval(updateClockAndTheme, 1000);
+
+            // イベントリスナー
+            window.addEventListener('resize', onWindowResize);
+
+            // スクロール連動処理
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+                const deltaY = currentScrollY - lastScrollY;
+                lastScrollY = currentScrollY;
+
+                targetPitch += deltaY * 0.15;
+                targetPitch = Math.min(Math.max(targetPitch, -20), 20);
+
+                clearTimeout(window.scrollTimer);
+                window.scrollTimer = setTimeout(() => {
+                    targetPitch = 0.0;
+                }, 300);
+            }, { passive: true });
+
+            // マウス・タッチドラッグ操作（視点移動補助）
+            window.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startY = e.clientY;
+            });
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const deltaY = e.clientY - startY;
+                targetPitch = Math.min(Math.max(-deltaY * 0.1, -25), 25);
+            });
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+                targetPitch = 0.0;
+            });
+
+            window.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+            window.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const deltaY = e.touches[0].clientY - startY;
+                targetPitch = Math.min(Math.max(-deltaY * 0.1, -25), 25);
+            }, { passive: true });
+            window.addEventListener('touchend', () => {
+                isDragging = false;
+                targetPitch = 0.0;
+            });
+            // 酔い防止トグルのイベントリスナー追加
+            document.getElementById('motion-toggle').addEventListener('change', (e) => {
+                isMotionDisabled = e.target.checked;
+
+                // オンになった時は即座に雲や地上物を非表示にする（単色背景のみにするため）
+                const visibility = !isMotionDisabled;
+                clouds.forEach(cloud => cloud.visible = visibility);
+                groundObjects.forEach(obj => obj.visible = visibility);
+                if (starSystem) starSystem.visible = visibility;
+            });
+            animate();
+        }
+
+        function createGroundObjects() {
+            const houseGeo = new THREE.BoxGeometry(30, 25, 30);
+            const houseMat = new THREE.MeshLambertMaterial({ color: 0xf8fafc });
+
+            const treeTrunkGeo = new THREE.CylinderGeometry(2, 4, 15);
+            const treeTrunkMat = new THREE.MeshLambertMaterial({ color: 0x78350f });
+            const treeLeavesGeo = new THREE.ConeGeometry(14, 30, 5);
+            const treeLeavesMat = new THREE.MeshLambertMaterial({ color: 0x166534 });
+
+            for (let i = 0; i < 120; i++) {
+                const group = new THREE.Group();
+                const isHouse = Math.random() > 0.4;
+
+                if (isHouse) {
+                    const heightScale = Math.random() * 2 + 0.8;
+                    const house = new THREE.Mesh(houseGeo, houseMat);
+                    house.scale.set(1, heightScale, 1);
+                    house.position.y = (25 * heightScale) / 2;
+                    group.add(house);
+                } else {
+                    const trunk = new THREE.Mesh(treeTrunkGeo, treeTrunkMat);
+                    trunk.position.y = 7.5;
+                    const leaves = new THREE.Mesh(treeLeavesGeo, treeLeavesMat);
+                    leaves.position.y = 25;
+                    group.add(trunk);
+                    group.add(leaves);
+                }
+
+                let x = (Math.random() - 0.5) * 3500;
+                if (Math.abs(x) < 100) x += x > 0 ? 150 : -150;
+
+                group.position.set(x, -400, -Math.random() * 5000);
+                scene.add(group);
+                groundObjects.push(group);
+            }
+        }
+
+        function createClouds() {
+            const cloudGeo = new THREE.DodecahedronGeometry(45, 1);
+            const cloudMat = new THREE.MeshLambertMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            for (let i = 0; i < 80; i++) {
+                const cloudGroup = new THREE.Group();
+                const numPuffs = Math.floor(Math.random() * 5) + 3;
+                for (let p = 0; p < numPuffs; p++) {
+                    const mesh = new THREE.Mesh(cloudGeo, cloudMat);
+                    mesh.position.set(
+                        (Math.random() - 0.5) * 90,
+                        (Math.random() - 0.5) * 20,
+                        (Math.random() - 0.5) * 90
+                    );
+                    const scale = Math.random() * 1.8 + 0.8;
+                    mesh.scale.set(scale, scale * 0.4, scale);
+                    cloudGroup.add(mesh);
+                }
+
+                cloudGroup.position.set(
+                    (Math.random() - 0.5) * 4000,
+                    Math.random() * 400 + 100,
+                    -Math.random() * 5000
+                );
+                scene.add(cloudGroup);
+                clouds.push(cloudGroup);
+            }
+        }
+
+        // 本体時計の更新と時間帯グラデーション切替
+        function updateClockAndTheme() {
+            const now = new Date();
+
+            // 時計表示更新
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock-time').textContent = `${hours}:${minutes}:${seconds}`;
+
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const date = String(now.getDate()).padStart(2, '0');
+            const days = ['日', '月', '火', '水', '木', '金', '土'];
+            const dayName = days[now.getDay()];
+            document.getElementById('clock-date').textContent = `${year}/${month}/${date} (${dayName})`;
+
+            // 時間帯の適用
+            const hour = now.getHours();
+            let themeKey = 'morning';
+
+            if (hour >= 16 && hour <= 18) {
+                themeKey = 'sunset';
+            } else if (hour >= 19 || hour <= 4) {
+                themeKey = 'night';
+            } else {
+                themeKey = 'morning';
+            }
+
+            const theme = THEMES[themeKey];
+            targetSkyColor = theme.skyColor;
+            targetFogColor = theme.fogColor;
+
+            ambientLight.color.setHex(theme.lightColor);
+            ambientLight.intensity = theme.lightIntensity;
+            starSystem.material.opacity = theme.starsOpacity;
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // 背景グラデーション補間
+            currentSky.lerp(targetSkyColor, 0.02);
+            currentFog.lerp(targetFogColor, 0.02);
+            scene.background = currentSky;
+            scene.fog.color = currentFog;
+
+            // 追加: 酔い防止モードがオンのときはアニメーション処理をスキップ
+            if (isMotionDisabled) {
+                renderer.render(scene, camera);
+                return;
+            }
+
+            // --- 以下、既存のアニメーション処理 ---
+            pitch += (targetPitch - pitch) * 0.06;
+            camera.rotation.x = THREE.MathUtils.degToRad(pitch);
+
+            const moveSpeed = speed * 0.1;
+
+            // 1. 地上オブジェクトの流れ
+            groundObjects.forEach(obj => {
+                obj.position.z += moveSpeed * 1.2;
+                if (obj.position.z > 400) {
+                    obj.position.z = -4500;
+                    let x = (Math.random() - 0.5) * 3500;
+                    if (Math.abs(x) < 100) x += x > 0 ? 150 : -150;
+                    obj.position.x = x;
+                }
+            });
+
+            // 2. 雲の流れ
+            clouds.forEach(cloud => {
+                cloud.position.z += moveSpeed;
+                if (cloud.position.z > 300) {
+                    cloud.position.z = -4500;
+                    cloud.position.x = (Math.random() - 0.5) * 4000;
+                    cloud.position.y = Math.random() * 400 + 100;
+                }
+            });
+
+            // 3. 星の流れ
+            if (starSystem.material.opacity > 0.01) {
+                const positions = starSystem.geometry.attributes.position.array;
+                for (let i = 2; i < positions.length; i += 3) {
+                    positions[i] += moveSpeed * 0.3;
+                    if (positions[i] > 1000) {
+                        positions[i] = -5000;
+                    }
+                }
+                starSystem.geometry.attributes.position.needsUpdate = true;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        window.onload = initFlightSim;
+
+    </script>
 </body>
 
 </html>
