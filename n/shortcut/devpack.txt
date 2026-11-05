@@ -11,4 +11,3 @@ gnupg
 unzip
 zip
 p7zip-full
-gimp
