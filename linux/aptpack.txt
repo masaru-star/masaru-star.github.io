@@ -1,0 +1,14 @@
+build-essential
+rustc
+git
+git-lfs
+nginx
+curl
+wget
+npm
+nodejs
+gnupg
+unzip
+zip
+p7zip-full
+gimp
