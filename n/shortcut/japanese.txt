@@ -1,0 +1,4 @@
+language-pack-ja
+language-pack-ja-base
+ibus-mozc
+ubuntu-defaults-ja
